@@ -1,0 +1,10 @@
+{
+    "title": "Tiếng việt",
+    "name": "tên",
+    "age": "tuổi",
+    "job": "công việc",
+    "gender": {
+        "male" : "nam",
+        "female": "nữ"
+    }
+}
