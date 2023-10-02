@@ -10,25 +10,25 @@ class AppTheme {
       displayLarge: TextStyle(
         fontSize: 32.sp,
         fontWeight: FontWeight.w700,
-        color: GRAY_COLOR,
+        color: BLACK_COLOR,
       ),
       displayMedium: TextStyle(
         fontSize: 20.sp,
         fontWeight: FontWeight.w700,
         height: 1.51,
-        color: GRAY_COLOR,
+        color: BLACK_COLOR,
       ),
       displaySmall: TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.w400,
         height: 1.51,
-        color: GRAY_COLOR,
+        color: BLACK_COLOR,
       ),
       titleSmall: TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
         height: 1.51,
-        color: GRAY_COLOR,
+        color: BLACK_COLOR,
       ),
     ),
   );
@@ -40,25 +40,25 @@ class AppTheme {
       displayLarge: TextStyle(
         fontSize: 32.sp,
         fontWeight: FontWeight.w700,
-        color: BLACK_COLOR,
+        color: GRAY_COLOR,
       ),
       displayMedium: TextStyle(
         fontSize: 20.sp,
         fontWeight: FontWeight.w700,
         height: 1.51,
-        color: BLACK_COLOR,
+        color: GRAY_COLOR,
       ),
       displaySmall: TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.w400,
         height: 1.51,
-        color: BLACK_COLOR,
+        color: GRAY_COLOR,
       ),
       titleSmall: TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
         height: 1.51,
-        color: BLACK_COLOR,
+        color: GRAY_COLOR,
       ),
     ),
   );

@@ -6,6 +6,7 @@ import 'package:my_todo/test-counter/bloc/counter_state.dart';
 
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
   CounterBloc() : super(CounterInit()) {
+    print('counter bloc');
     on<IncrementEvent>(incrementEvent);
     on<DecrementEvent>(decrementEvent);
   }

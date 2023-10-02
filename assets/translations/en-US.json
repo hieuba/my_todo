@@ -1,11 +1,18 @@
 {
     "title": "English",
-    "name": "name",
-    "age": "age",
-    "job": "job",
+    
     "gender": {
         "male" : "boy",
         "female": "girl"
+    },
+    "button_text": {
+        "back": "BACK",
+        "next" : "NEXT",
+        "skip" : "SKIP",
+        "getstarted": "GET STARTED",
+        "login": "LOGIN",
+        "register": "CREATE ACCOUNT"
+        
     }
     
 }
