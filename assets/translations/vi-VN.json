@@ -1,10 +1,16 @@
 {
     "title": "Tiếng việt",
-    "name": "tên",
-    "age": "tuổi",
-    "job": "công việc",
+    
     "gender": {
         "male" : "nam",
         "female": "nữ"
+    },
+    "button_text": {
+        "back": "TRỞ VỀ",
+        "next" : "TIẾP",
+        "skip" : "BỎ QUA",
+        "getstarted": "BẮT ĐẦU",
+        "login": "ĐĂNG NHẬP",
+        "register": "TẠO TÀI KHOẢN"
     }
 }

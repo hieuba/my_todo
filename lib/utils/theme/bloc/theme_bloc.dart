@@ -4,6 +4,7 @@ import 'package:my_todo/utils/theme/bloc/theme_state.dart';
 
 class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
   ThemeBloc() : super(ThemeInit()) {
+    print('theme bloc');
     on<ToggleOnEvent>((event, emit) {
       emit(ThemeState(switchValue: true));
     });

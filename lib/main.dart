@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:my_todo/localization_checker.dart';
+import 'package:my_todo/screens/intro/bloc/intro_bloc.dart';
 import 'package:my_todo/screens/intro/intro_screen.dart';
+import 'package:my_todo/screens/login/login_screen.dart';
 import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
 import 'package:my_todo/test-counter/bloc/counter_event.dart';
 import 'package:my_todo/test-counter/bloc/counter_state.dart';
@@ -45,10 +47,15 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (context) => ThemeBloc(),
         ),
         BlocProvider(
+          lazy: false,
           create: (context) => CounterBloc(),
+        ),
+        BlocProvider(
+          create: (context) => IntroBloc(),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
@@ -63,10 +70,14 @@ class MyApp extends StatelessWidget {
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
                 debugShowCheckedModeBanner: false,
-                home: const HomePage(),
+                home: const IntroScreen(),
                 theme: state.switchValue
                     ? AppTheme.darkTheme
                     : AppTheme.lightTheme,
+                routes: {
+                  'home_page': (context) => const HomePage(),
+                  'login': (context) => const LoginScreen(),
+                },
               );
             },
           );
@@ -87,6 +98,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {}),
       appBar: AppBar(title: Text(tr('title')), actions: [
         IconButton(
             onPressed: () {
