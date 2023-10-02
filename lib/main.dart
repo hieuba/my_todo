@@ -6,6 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:my_todo/localization_checker.dart';
 import 'package:my_todo/screens/intro/intro_screen.dart';
+import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
+import 'package:my_todo/test-counter/bloc/counter_event.dart';
+import 'package:my_todo/test-counter/bloc/counter_state.dart';
 import 'package:my_todo/utils/theme/bloc/theme_bloc.dart';
 import 'package:my_todo/utils/theme/bloc/theme_event.dart';
 import 'package:my_todo/utils/theme/bloc/theme_state.dart';
@@ -44,6 +47,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ThemeBloc(),
         ),
+        BlocProvider(
+          create: (context) => CounterBloc(),
+        ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
@@ -57,7 +63,7 @@ class MyApp extends StatelessWidget {
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
                 debugShowCheckedModeBanner: false,
-                home: const IntroScreen(),
+                home: const HomePage(),
                 theme: state.switchValue
                     ? AppTheme.darkTheme
                     : AppTheme.lightTheme,
@@ -105,6 +111,27 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text('${'name'.tr()} : haha'),
             Text('${tr("gender.male")}'),
+            Divider(),
+            BlocBuilder<CounterBloc, CounterState>(
+              builder: (context, state) {
+                return Text(BlocProvider.of<CounterBloc>(context)
+                    .state
+                    .number
+                    .toString());
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      BlocProvider.of<CounterBloc>(context)
+                          .add(IncrementEvent());
+                    },
+                    icon: const Icon(Icons.add)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.remove))
+              ],
+            ),
           ],
         ),
       ),

@@ -17,5 +17,5 @@ class ThemeState {
 }
 
 class ThemeInit extends ThemeState {
-  ThemeInit({required bool switchValue}) : super(switchValue: false);
+  ThemeInit() : super(switchValue: false);
 }
