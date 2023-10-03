@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "529767161169",
+    "project_id": "my-todo-639f3",
+    "storage_bucket": "my-todo-639f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529767161169:android:48940200bc4aaeb7e00770",
+        "android_client_info": {
+          "package_name": "com.liketraicay.mytodo.my_todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcaccdG8xA3CYNXN_0evPtoqlebDfZf7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

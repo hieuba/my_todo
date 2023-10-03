@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/components/buttons/small_btn.dart';
 import 'package:my_todo/components/buttons/text_btn.dart';
-import 'package:my_todo/main.dart';
 import 'package:my_todo/screens/intro/bloc/intro_bloc.dart';
 import 'package:my_todo/screens/intro/bloc/intro_event.dart';
 import 'package:my_todo/screens/intro/bloc/intro_state.dart';
 import 'package:my_todo/screens/intro/welcome_screen.dart';
 import 'package:my_todo/utils/app_color.dart';
+import 'package:page_transition/page_transition.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -53,7 +53,8 @@ class _IntroScreenState extends State<IntroScreen> {
                       onLastPage = (index == 2);
 
                       state.page = index;
-                      BlocProvider.of<IntroBloc>(context).add(IntroEvent());
+                      // BlocProvider.of<IntroBloc>(context).add(IntroEvent());
+                      context.read<IntroBloc>().add(IntroEvent());
                     },
                     children: [
                       _buildPage(
@@ -109,7 +110,9 @@ class _IntroScreenState extends State<IntroScreen> {
       left: 0,
       child: TextButton(
         onPressed: () {
-          _pageController.jumpToPage(3);
+          _pageController.animateToPage(3,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.linear);
         },
         child: Text(
           tr('button_text.skip'),
@@ -195,9 +198,11 @@ class _IntroScreenState extends State<IntroScreen> {
                 // last index
                 // Navigator.pushNamedAndRemoveUntil(
                 //     context, 'home_page', (route) => false);
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => WelcomeScreen(),
-                ));
+                Navigator.of(context).push(
+                  PageTransition(
+                      child: const WelcomeScreen(),
+                      type: PageTransitionType.bottomToTop),
+                );
               }
             }),
           ],

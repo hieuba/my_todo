@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 const Color PRIMARY_COLOR = Color(0xff8875FF);
 const Color BLACK_COLOR = Color(0xff121212);
 const Color GRAY_COLOR = Color(0xffffffdd);
+const Color BGREY_COLOR = Color(0xff979797);
 
 const Color GROCERY_COLOR = Color(0xffCCFF80);
 const Color WORK_COLOR = Color(0xffFF9680);

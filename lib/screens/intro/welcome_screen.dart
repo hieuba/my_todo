@@ -35,12 +35,14 @@ class WelcomeScreen extends StatelessWidget {
               text: 'button_text.login',
               textTheme: textTheme,
               onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'login', (route) => false);
+                Navigator.pushNamed(context, 'login');
               },
             ),
             SizedBox(height: 28.h),
-            outlineBtn(size, 'button_text.register', textTheme),
+            outlineBtn(size, 'button_text.register', textTheme, 'register', '',
+                () {
+              Navigator.pushNamed(context, 'register');
+            }),
             SizedBox(height: 10.h),
           ],
         ),
@@ -48,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Container _buildAppBar(Size size, BuildContext context) {
+  Widget _buildAppBar(Size size, BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
       height: 45.h,

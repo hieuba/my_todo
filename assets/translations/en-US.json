@@ -1,10 +1,7 @@
 {
     "title": "English",
     
-    "gender": {
-        "male" : "boy",
-        "female": "girl"
-    },
+  
     "button_text": {
         "back": "BACK",
         "next" : "NEXT",
@@ -12,7 +9,32 @@
         "getstarted": "GET STARTED",
         "login": "LOGIN",
         "register": "CREATE ACCOUNT"
-        
+    },
+    "login_text": {
+        "login": "Login",
+        "username": "Username",
+        "password": "Password",
+        "loginwithgg": "Login with Google",
+        "loginwithap": "Login with Apple"
+    },
+    "create_account": {
+        "create" : "Don't have an acount?",
+        "register" : "Register",
+        "repassword": "RePassword",
+        "alreadyacc" : "Already have an account?"
+    },
+    "snackbar_login" : {
+        "emailempty": "You need to fill Email address",
+        "passwordempty": "You need to fill password",
+        "usernotexits": "User does not exist",
+        "usernotverified" : "User not verified",
+        "error": "Currently you are not a user of this app"
+    },
+    "firebase_auth_exception" : {
+        "user_not_found": "No user for that email",
+        "wrong_password" : "wrong password provided for that user",
+        "invalid_email": "your email format is wrong"
     }
+     
     
 }
