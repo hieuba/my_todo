@@ -1,10 +1,6 @@
 {
     "title": "Tiếng việt",
-    
-    "gender": {
-        "male" : "nam",
-        "female": "nữ"
-    },
+
     "button_text": {
         "back": "TRỞ VỀ",
         "next" : "TIẾP",
@@ -12,5 +8,30 @@
         "getstarted": "BẮT ĐẦU",
         "login": "ĐĂNG NHẬP",
         "register": "TẠO TÀI KHOẢN"
+    },
+    "login_text": {
+        "login": "Đăng nhập",
+        "username": "Tên đăng nhập",
+        "password": "Mật khẩu",
+        "loginwithgg": "Đăng nhập với Google",
+        "loginwithap": "Đăng nhập với Apple"
+    },
+    "create_account": {
+        "create" : "Bạn chưa có tài khoản?",
+        "register" : "Đăng kí",
+        "repassword": "Nhập lại mật khẩu",
+        "alreadyacc" : "Bạn đã có tài khoản?"
+    },
+    "snackbar_login" : {
+        "emailempty": "Bạn phải điền địa chỉ Email",
+        "passwordempty": "Bạn phải điền mật khẩu",
+        "usernotexits": "Tài khoản không tồn tại",
+        "usernotverified" : "Tài khoản chưa xác thực",
+        "error": "Hiện tại bạn không phải là người dùng trong ứng dụng"
+    },
+    "firebase_auth_exception" : {
+        "user_not_found": "Không có người dùng cho email đó",
+        "wrong_password" : "Mật khẩu được cung cấp cho người dùng đó sai",
+        "invalid_email": "Định dạng email không hợp "
     }
 }

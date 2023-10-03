@@ -3,28 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget outlineBtn(Size size, String text, TextTheme textTheme) {
-  return Container(
-    height: 48.h,
-    width: size.width,
-    decoration: BoxDecoration(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(APP_BODER_RADIUS),
-      border: Border.all(color: PRIMARY_COLOR, width: 2.w),
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.transparent,
-          spreadRadius: -1,
-          blurRadius: 4,
-          offset: Offset(-2, 2),
-        )
-      ],
-    ),
-    child: Center(
-      child: Text(
-        tr(text),
-        style: textTheme.titleSmall,
+Widget outlineBtn(Size size, String text, TextTheme textTheme, String type,
+    String? iconPath, VoidCallback onTap) {
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      height: 48.h,
+      width: size.width,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(APP_BODER_RADIUS),
+        border: Border.all(color: PRIMARY_COLOR, width: 1.w),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.transparent,
+            spreadRadius: -1,
+            blurRadius: 4,
+            offset: Offset(-2, 2),
+          )
+        ],
       ),
+      child: type == 'register'
+          ? Center(
+              child: Text(tr(text)),
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 24.h,
+                  width: 24.w,
+                  child: Image.asset(
+                    iconPath ?? '',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  tr(text),
+                  style: textTheme.titleSmall,
+                ),
+              ],
+            ),
     ),
   );
 }

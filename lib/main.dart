@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:my_todo/bloc_providers.dart';
 import 'package:my_todo/localization_checker.dart';
+import 'package:my_todo/screens/application/application.dart';
 import 'package:my_todo/screens/intro/bloc/intro_bloc.dart';
 import 'package:my_todo/screens/intro/intro_screen.dart';
+import 'package:my_todo/screens/intro/welcome_screen.dart';
+import 'package:my_todo/screens/login/bloc/login_bloc.dart';
 import 'package:my_todo/screens/login/login_screen.dart';
+import 'package:my_todo/screens/register/register_screen.dart';
 import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
 import 'package:my_todo/test-counter/bloc/counter_event.dart';
 import 'package:my_todo/test-counter/bloc/counter_state.dart';
@@ -16,9 +21,14 @@ import 'package:my_todo/utils/theme/bloc/theme_event.dart';
 import 'package:my_todo/utils/theme/bloc/theme_state.dart';
 import 'package:my_todo/utils/app_theme.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+      //
+      );
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
@@ -45,19 +55,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          lazy: false,
-          create: (context) => ThemeBloc(),
-        ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => CounterBloc(),
-        ),
-        BlocProvider(
-          create: (context) => IntroBloc(),
-        ),
-      ],
+      providers: AppBlocProviders.allBlocProviders,
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return ScreenUtilInit(
@@ -70,13 +68,15 @@ class MyApp extends StatelessWidget {
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
                 debugShowCheckedModeBanner: false,
-                home: const IntroScreen(),
+                home: const WelcomeScreen(),
                 theme: state.switchValue
                     ? AppTheme.darkTheme
                     : AppTheme.lightTheme,
                 routes: {
                   'home_page': (context) => const HomePage(),
+                  'welcome': (context) => const WelcomeScreen(),
                   'login': (context) => const LoginScreen(),
+                  'register': (context) => const RegisterScreen(),
                 },
               );
             },
