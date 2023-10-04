@@ -12,7 +12,7 @@
     },
     "login_text": {
         "login": "Login",
-        "username": "Username",
+        "username": "Email",
         "password": "Password",
         "loginwithgg": "Login with Google",
         "loginwithap": "Login with Apple"
@@ -20,12 +20,13 @@
     "create_account": {
         "create" : "Don't have an acount?",
         "register" : "Register",
-        "repassword": "RePassword",
+        "repassword": "Enter repassword",
         "alreadyacc" : "Already have an account?"
     },
     "snackbar_login" : {
         "emailempty": "You need to fill Email address",
         "passwordempty": "You need to fill password",
+        "re_passwordempty": "You need to fill repassword",
         "usernotexits": "User does not exist",
         "usernotverified" : "User not verified",
         "error": "Currently you are not a user of this app"

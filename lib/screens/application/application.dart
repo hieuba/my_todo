@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_todo/screens/application/bloc/application_bloc.dart';
+import 'package:my_todo/screens/application/bloc/application_event.dart';
+import 'package:my_todo/screens/application/bloc/application_state.dart';
 import 'package:my_todo/screens/application/components/build_page.dart';
 import 'package:my_todo/utils/app_color.dart';
 
@@ -11,128 +15,53 @@ class ApplicationScreen extends StatefulWidget {
 }
 
 class _ApplicationScreenState extends State<ApplicationScreen> {
-  int _index = 0;
-
   @override
   Widget build(BuildContext context) {
-    final _iconColor = Theme.of(context).brightness == Brightness.light
-        ? Colors.black
-        : Colors.white;
-    return Scaffold(
-      // backgroundColor: Colors.amber.shade100,
-      body: buildPage(_index),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent, // Set splash color to transparent
-          highlightColor:
-              Colors.transparent, // Set highlight color to transparent
-        ),
-        child: BottomNavigationBar(
-          mouseCursor: SystemMouseCursors.basic,
-          backgroundColor: Theme.of(context).brightness == Brightness.light
-              ? GRAY_COLOR
-              : Color(0XFF363636),
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _index,
-          onTap: (value) {
-            if (value != 2) {
-              setState(() {
-                _index = value;
-              });
-              print(value);
-            }
-          },
-          elevation: 0,
-          selectedItemColor: Colors.grey,
-          unselectedItemColor: Colors.grey, // Color for unselected items
-          items: [
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/home_outline.png',
-                  color: _iconColor,
-                ),
-              ),
-              activeIcon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/home.png',
-                  color: _iconColor,
-                ),
-              ),
-              label: 'Home',
+    // ignore: no_leading_underscores_for_local_identifiers
+    final iconColor = Theme.of(context).brightness == Brightness.light
+        ? BLACK_COLOR
+        : WHITE_COLOR;
+    return BlocBuilder<ApplicationBloc, ApplicationState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: buildPage(state.index),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+              splashColor:
+                  Colors.transparent, // Set splash color to transparent
+              highlightColor:
+                  Colors.transparent, // Set highlight color to transparent
             ),
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user_outline.png',
-                  color: _iconColor,
-                ),
-              ),
-              activeIcon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user.png',
-                  color: _iconColor,
-                ),
-              ),
-              label: 'Person',
+            child: BottomNavigationBar(
+              elevation: 0,
+              selectedItemColor: iconColor,
+              unselectedItemColor: iconColor,
+              selectedFontSize: 12.sp,
+              unselectedFontSize: 12.sp,
+              backgroundColor: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey.shade200
+                  : const Color(0XFF363636),
+              type: BottomNavigationBarType.fixed,
+              currentIndex: state.index,
+              onTap: (value) {
+                if (value != 2) {
+                  context.read<ApplicationBloc>().add(TriggerAppEvent(value));
+                }
+              },
+              items: bottomBar(context, iconColor),
             ),
-            const BottomNavigationBarItem(
-              icon: SizedBox(width: 0), // Empty SizedBox as a placeholder
-              label: '',
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: const Icon(
+              Icons.add,
+              color: WHITE_COLOR,
             ),
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user_outline.png',
-                  color: _iconColor,
-                ),
-              ),
-              activeIcon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user.png',
-                  color: _iconColor,
-                ),
-              ),
-              label: 'Person',
-            ),
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user_outline.png',
-                  color: _iconColor,
-                ),
-              ),
-              activeIcon: SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/user.png',
-                  color: _iconColor,
-                ),
-              ),
-              label: 'Person',
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-      ),
+          ),
+        );
+      },
     );
   }
 }
