@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget buildTextField(
+Widget buildTextField({
   void Function(String)? func,
-  String hintText,
-  Size size,
-  TextTheme textTheme,
-  BuildContext context,
-  String type,
-) {
+  required String hintText,
+  required Size size,
+  required TextTheme textTheme,
+  required BuildContext context,
+  required String type,
+}) {
   return Container(
     height: 48.h,
     width: size.width,
@@ -56,8 +56,11 @@ Widget buildTextField(
               color: Colors.transparent,
             ),
           ),
-          hintStyle: textTheme.titleSmall!
-              .copyWith(color: const Color.fromARGB(255, 171, 168, 168)),
+          hintStyle: textTheme.titleSmall!.copyWith(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey.shade400
+                : Colors.grey.shade600,
+          ),
         ),
       ),
     ),

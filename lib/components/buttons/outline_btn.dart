@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget outlineBtn(Size size, String text, TextTheme textTheme, String type,
-    String? iconPath, VoidCallback onTap) {
+Widget outlineBtn({
+  required Size size,
+  required String textBtn,
+  required TextTheme textTheme,
+  required String type,
+  required String? iconPath,
+  required VoidCallback onTap,
+}) {
   return InkWell(
     onTap: onTap,
     child: Container(
@@ -25,7 +31,7 @@ Widget outlineBtn(Size size, String text, TextTheme textTheme, String type,
       ),
       child: type == 'register'
           ? Center(
-              child: Text(tr(text)),
+              child: Text(tr(textBtn)),
             )
           : Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +47,7 @@ Widget outlineBtn(Size size, String text, TextTheme textTheme, String type,
                 ),
                 SizedBox(width: 10.w),
                 Text(
-                  tr(text),
+                  tr(textBtn),
                   style: textTheme.titleSmall,
                 ),
               ],

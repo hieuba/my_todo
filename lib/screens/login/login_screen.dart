@@ -46,46 +46,77 @@ class LoginScreen extends StatelessWidget {
                       style: textTheme.displayLarge,
                     ),
                     SizedBox(height: 50.h),
+                    // email
                     reusableText(
-                        text: 'login_text.username', textTheme: textTheme),
+                      text: 'login_text.username',
+                      textTheme: textTheme,
+                    ),
                     SizedBox(height: 8.h),
-                    buildTextField((value) {
-                      context.read<LoginBloc>().add(EmailEvent(value));
-                    }, 'Enter your username', size, textTheme, context,
-                        'username'),
+                    buildTextField(
+                      func: (value) {
+                        context.read<LoginBloc>().add(EmailEvent(value));
+                      },
+                      hintText: 'Enter your email',
+                      size: size,
+                      textTheme: textTheme,
+                      context: context,
+                      type: 'username',
+                    ),
                     SizedBox(height: 25.h),
+                    // password
                     reusableText(
-                        text: 'login_text.password', textTheme: textTheme),
+                      text: 'login_text.password',
+                      textTheme: textTheme,
+                    ),
                     SizedBox(height: 8.h),
-                    buildTextField((value) {
-                      print(value);
-                      context.read<LoginBloc>().add(PasswordEvent(value));
-                    }, '••••••••', size, textTheme, context, 'password'),
+                    buildTextField(
+                      func: (value) {
+                        context.read<LoginBloc>().add(PasswordEvent(value));
+                      },
+                      hintText: '••••••••',
+                      size: size,
+                      textTheme: textTheme,
+                      context: context,
+                      type: 'password',
+                    ),
                     SizedBox(height: 70.h),
+                    // login btn
                     mainBtn(
-                        size: size,
-                        text: 'login_text.login',
-                        textTheme: textTheme,
-                        onTap: () {
-                          LoginController(context: context)
-                              .handleLogin('email');
-                        }),
+                      size: size,
+                      text: 'login_text.login',
+                      textTheme: textTheme,
+                      onTap: () {
+                        LoginController(context: context).handleLogin();
+                      },
+                    ),
                     SizedBox(height: 20.h),
                     divider(textTheme),
                     SizedBox(height: 20.h),
-                    outlineBtn(size, 'login_text.loginwithgg', textTheme,
-                        'google', 'assets/icons/google.png', () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ));
-                    }),
+                    outlineBtn(
+                      size: size,
+                      textBtn: 'login_text.loginwithgg',
+                      textTheme: textTheme,
+                      type: 'google',
+                      iconPath: 'assets/icons/google.png',
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ));
+                      },
+                    ),
                     SizedBox(height: 20.h),
-                    outlineBtn(size, 'login_text.loginwithap', textTheme,
-                        'apple', 'assets/icons/apple.png', () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ApplicationScreen(),
-                      ));
-                    }),
+                    outlineBtn(
+                      size: size,
+                      textBtn: 'login_text.loginwithap',
+                      textTheme: textTheme,
+                      type: 'apple',
+                      iconPath: 'assets/icons/apple.png',
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ApplicationScreen(),
+                        ));
+                      },
+                    ),
                     SizedBox(height: 40.h),
                     _buildCreateAccount(context, textTheme),
                     SizedBox(height: 20.h),
@@ -102,7 +133,6 @@ class LoginScreen extends StatelessWidget {
 
 Widget _buildAppBar(Size size, BuildContext context) {
   return Container(
-    // color: Colors.amber.shade300,
     alignment: Alignment.centerLeft,
     height: 45.h,
     width: size.width,
@@ -128,7 +158,7 @@ Widget _buildAppBar(Size size, BuildContext context) {
 Widget _buildCreateAccount(BuildContext context, TextTheme textTheme) {
   return InkWell(
     onTap: () {
-      Navigator.of(context).pushNamed('register');
+      Navigator.of(context).pushNamed('/register');
     },
     child: Center(
       child: RichText(

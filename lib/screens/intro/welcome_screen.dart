@@ -35,14 +35,20 @@ class WelcomeScreen extends StatelessWidget {
               text: 'button_text.login',
               textTheme: textTheme,
               onTap: () {
-                Navigator.pushNamed(context, 'login');
+                Navigator.pushNamed(context, '/login');
               },
             ),
             SizedBox(height: 28.h),
-            outlineBtn(size, 'button_text.register', textTheme, 'register', '',
-                () {
-              Navigator.pushNamed(context, 'register');
-            }),
+            outlineBtn(
+              size: size,
+              textBtn: 'button_text.register',
+              textTheme: textTheme,
+              type: 'register',
+              iconPath: '',
+              onTap: () {
+                Navigator.pushNamed(context, '/register');
+              },
+            ),
             SizedBox(height: 10.h),
           ],
         ),
