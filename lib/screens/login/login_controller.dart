@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_todo/components/widgets/flutter_toast.dart';
+import 'package:my_todo/global.dart';
 import 'package:my_todo/screens/application/application.dart';
 import 'package:my_todo/screens/login/bloc/login_bloc.dart';
+import 'package:my_todo/utils/constans.dart';
 
 class LoginController {
   final BuildContext context;
@@ -50,6 +52,8 @@ class LoginController {
         var user = credential.user;
 
         if (user != null) {
+          Global.storageService
+              .setString(AppConstants.STORAGE_USER_TOKEN_KEY, '12345678');
           // we got verified user from firebase
           Navigator.of(context)
               .pushNamedAndRemoveUntil('/application', (route) => false);

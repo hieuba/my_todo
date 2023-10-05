@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/components/buttons/small_btn.dart';
 import 'package:my_todo/components/buttons/text_btn.dart';
+import 'package:my_todo/global.dart';
 import 'package:my_todo/screens/intro/bloc/intro_bloc.dart';
 import 'package:my_todo/screens/intro/bloc/intro_event.dart';
 import 'package:my_todo/screens/intro/bloc/intro_state.dart';
 import 'package:my_todo/screens/intro/welcome_screen.dart';
 import 'package:my_todo/utils/app_color.dart';
+import 'package:my_todo/utils/constans.dart';
 import 'package:page_transition/page_transition.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -112,7 +116,7 @@ class _IntroScreenState extends State<IntroScreen> {
         onPressed: () {
           _pageController.animateToPage(3,
               duration: const Duration(milliseconds: 400),
-              curve: Curves.linear);
+              curve: Curves.decelerate);
         },
         child: Text(
           tr('button_text.skip'),
@@ -195,13 +199,17 @@ class _IntroScreenState extends State<IntroScreen> {
                   curve: Curves.decelerate,
                 );
               } else {
-                // last index
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, 'home_page', (route) => false);
+                // khi ấn vào đây thì app đã được mở lần đầu
+                Global.storageService
+                    .setBool(AppConstants.STORAGE_DEVICE_OPEN_FIRST_TIME, true);
+                print(
+                    'the value is: ${Global.storageService.getDeviceFirstOpen()}');
+
                 Navigator.of(context).push(
                   PageTransition(
-                      child: const WelcomeScreen(),
-                      type: PageTransitionType.bottomToTop),
+                    child: const WelcomeScreen(),
+                    type: PageTransitionType.bottomToTop,
+                  ),
                 );
               }
             }),

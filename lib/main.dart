@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
+import 'package:my_todo/global.dart';
 import 'package:my_todo/routes/routes.dart';
-import 'package:my_todo/localization_checker.dart';
+import 'package:my_todo/services/localization_checker.dart';
 import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
 import 'package:my_todo/test-counter/bloc/counter_event.dart';
 import 'package:my_todo/test-counter/bloc/counter_state.dart';
@@ -19,18 +16,7 @@ import 'package:my_todo/utils/theme/bloc/theme_state.dart';
 import 'package:my_todo/utils/app_theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-      //
-      );
-
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
-  );
-  await EasyLocalization.ensureInitialized();
+  await Global.initGlobal();
   runApp(
     EasyLocalization(
       supportedLocales: const [

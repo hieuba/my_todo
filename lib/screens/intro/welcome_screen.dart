@@ -69,12 +69,12 @@ class WelcomeScreen extends StatelessWidget {
           alignment: Alignment.centerLeft,
           height: 45.h,
           width: 45.w,
-          child: Image.asset(
-            'assets/icons/arrow-left.png',
-            color: Theme.of(context).brightness == Brightness.light
-                ? BLACK_COLOR
-                : GRAY_COLOR,
-          ),
+          // child: Image.asset(
+          //   'assets/icons/arrow-left.png',
+          //   color: Theme.of(context).brightness == Brightness.light
+          //       ? BLACK_COLOR
+          //       : GRAY_COLOR,
+          // ),
         ),
       ),
     );

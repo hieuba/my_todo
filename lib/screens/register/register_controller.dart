@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +50,7 @@ class RegisterController {
         if (credential.user != null) {
           await credential.user!.sendEmailVerification();
           print('kiem tra email de xac thuc tai khoan');
-          Navigator.of(context).popAndPushNamed('login');
+          Navigator.of(context).popAndPushNamed('/login');
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
