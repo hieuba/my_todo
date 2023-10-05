@@ -30,6 +30,12 @@ class AppTheme {
           height: 1.51,
           color: BLACK_COLOR,
         ),
+        titleMedium: TextStyle(
+          fontSize: 14.sp,
+          height: 1.51,
+          fontWeight: FontWeight.w400,
+          color: BLACK_COLOR,
+        ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: PRIMARY_COLOR,
@@ -60,6 +66,12 @@ class AppTheme {
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,
           height: 1.51,
+          color: GRAY_COLOR,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 14.sp,
+          height: 1.51,
+          fontWeight: FontWeight.w400,
           color: GRAY_COLOR,
         ),
       ),

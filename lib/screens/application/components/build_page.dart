@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_todo/screens/profile/profile_screen.dart';
 
 Widget buildPage(int index) {
   List<Widget> _widgets = [
-    Center(child: Text('index')),
-    Center(child: Text('calendar')),
-    Center(child: Text('abc')),
-    Center(child: Text('focus')),
-    Center(child: Text('profile')),
+    const Center(child: Text('index')),
+    const Center(child: Text('calendar')),
+    const Center(child: Text('abc')),
+    const Center(child: Text('focus')),
+    const ProfileScreen(),
   ];
   return _widgets[index];
 }
