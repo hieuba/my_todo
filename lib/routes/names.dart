@@ -10,4 +10,6 @@ class AppRoutes {
   static const APPLICATION = '/application';
 
   static const COUNTER = '/counter';
+
+  static const SETTINGS = '/setting';
 }

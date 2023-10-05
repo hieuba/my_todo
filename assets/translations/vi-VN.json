@@ -34,5 +34,18 @@
         "user_not_found": "Không có người dùng cho email đó",
         "wrong_password" : "Mật khẩu được cung cấp cho người dùng đó sai",
         "invalid_email": "Định dạng email không hợp "
-    }
+    },
+    "profile": {
+        "settings" : "Cài đặt",
+        "account" : "Tài khoản",
+        "changepass" : "Đổi mật khẩu",
+        "logout" : "Đăng xuất"
+    },
+    "bottomsheet": {
+        "language" : "Thay đổi ngôn ngữ",
+        "theme": "Thay đổi chủ đề",
+        "text_theme": "Chủ đề",
+        "dark": "Tối",
+        "light" : "Sáng"
+    } 
 }

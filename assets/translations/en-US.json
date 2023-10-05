@@ -35,7 +35,20 @@
         "user_not_found": "No user for that email",
         "wrong_password" : "wrong password provided for that user",
         "invalid_email": "your email format is wrong"
-    }
+    },
+    "profile": {
+        "settings" : "Settings",
+        "account" : "Account",
+        "changepass" : "Change password",
+        "logout" : "Log out"
+    },
+    "bottomsheet": {
+        "language" : "Change app language",
+        "theme": "Change app theme",
+        "text_theme": "Theme",
+        "dark": "Dark",
+        "light" : "Light"
+    } 
      
     
 }
