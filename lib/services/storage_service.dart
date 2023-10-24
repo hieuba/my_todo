@@ -29,4 +29,8 @@ class StorageService {
         ? false
         : true;
   }
+
+  Future<bool> removeToken(String key) {
+    return _pref.remove(key);
+  }
 }

@@ -15,8 +15,18 @@ class ApplicationScreen extends StatefulWidget {
 }
 
 class _ApplicationScreenState extends State<ApplicationScreen> {
+  TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    var size = MediaQuery.sizeOf(context);
     // ignore: no_leading_underscores_for_local_identifiers
     final iconColor = Theme.of(context).brightness == Brightness.light
         ? BLACK_COLOR
@@ -54,7 +64,9 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              _showModalBottomSheet();
+            },
             child: const Icon(
               Icons.add,
               color: WHITE_COLOR,
@@ -62,6 +74,142 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
           ),
         );
       },
+    );
+  }
+
+  void _showModalBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled:
+          true, // Set to true to make the sheet take up the entire screen height
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            height: 200.0, // Set the desired height
+            child: Column(
+              children: [
+                const Text('ModalBottomSheet Content'),
+                TextFormField(
+                  controller: _textController,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter something',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Do something with the text input
+                    print(_textController.text);
+                    // Close the ModalBottomSheet
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+/*
+  void _showModalBottomSheet(TextTheme textTheme, Size size) {
+    showModalBottomSheet(
+      backgroundColor: Colors.amber.shade100,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child:
+              //  Container(
+              //   height: 228.h,
+              //   child: Column(
+              //     children: [
+              //       Text(
+              //         'Add Task',
+              //         style: textTheme.displayMedium,
+              //       ),
+              //       SizedBox(height: 14.h),
+              //       _textField((value) {}, '', size)
+              //     ],
+              //   ),
+              // ),
+              Column(
+            children: [
+              TextFormField(
+                controller: _textController,
+                focusNode: _focusNode,
+                decoration: InputDecoration(labelText: 'Enter something'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Do something with the text input
+                  print(_textController.text);
+                  // Close the ModalBottomSheet
+                  Navigator.of(context).pop();
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    // Set focus to the text input when the ModalBottomSheet is shown
+    _focusNode.requestFocus();
+  }
+*/
+  Widget _textField(void Function(String)? func, String hintText, Size size) {
+    return Container(
+      height: size.height * .07,
+      width: size.width,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xffA8B2BD)),
+        borderRadius: BorderRadius.circular(6.w),
+        color: Colors.amber,
+      ),
+      child: SizedBox(
+        height: size.height,
+        width: size.width,
+        child: TextField(
+          controller: _textController,
+          textInputAction: TextInputAction.done,
+          onChanged: (value) => func!(value),
+          keyboardType: TextInputType.multiline,
+          autocorrect: false,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.clear,
+              ),
+            ),
+            hintText: hintText,
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            disabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.transparent,
+              ),
+            ),
+            hintStyle: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xffBABABA),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

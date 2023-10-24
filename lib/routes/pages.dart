@@ -12,6 +12,9 @@ import 'package:my_todo/screens/intro/intro_screen.dart';
 import 'package:my_todo/screens/intro/welcome_screen.dart';
 import 'package:my_todo/screens/login/bloc/login_bloc.dart';
 import 'package:my_todo/screens/login/login_screen.dart';
+import 'package:my_todo/screens/profile/setting/bloc/setting_bloc.dart';
+import 'package:my_todo/screens/profile/setting/setting_screen.dart';
+import 'package:my_todo/screens/profile/user/bloc/user_bloc.dart';
 import 'package:my_todo/screens/register/bloc/register_bloc.dart';
 import 'package:my_todo/screens/register/register_screen.dart';
 import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
@@ -62,15 +65,29 @@ class AppPages {
         ),
       ),
       PageEntity(
-          route: AppRoutes.COUNTER,
-          page: const HomePage(),
-          bloc: BlocProvider(
-            create: (context) => CounterBloc(),
-          )),
+        route: AppRoutes.COUNTER,
+        page: const HomePage(),
+        bloc: BlocProvider(
+          create: (context) => CounterBloc(),
+        ),
+      ),
       PageEntity(
-          bloc: BlocProvider(
-        create: (context) => ThemeBloc(),
-      )),
+        route: AppRoutes.SETTINGS,
+        page: const SettingScreen(),
+        bloc: BlocProvider(
+          create: (context) => SettingBloc(),
+        ),
+      ),
+      PageEntity(
+        bloc: BlocProvider(
+          create: (context) => ThemeBloc(),
+        ),
+      ),
+      PageEntity(
+        bloc: BlocProvider(
+          create: (context) => AvatarCubit(),
+        ),
+      ),
     ];
   }
 

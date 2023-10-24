@@ -54,5 +54,11 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>need to up load image</string>
+		<key>NSCameraUsageDescription</key>
+		<string>need to up load image</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>need to up load image</string>
 	</dict>
 </plist>

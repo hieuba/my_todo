@@ -36,9 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        ...AppPages.allBlocProviders(context),
-      ],
+      providers: List.from(AppPages.allBlocProviders(context)),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return ScreenUtilInit(
