@@ -6,15 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:my_todo/global.dart';
 import 'package:my_todo/routes/routes.dart';
 import 'package:my_todo/screens/application/bloc/application_bloc.dart';
 import 'package:my_todo/screens/application/bloc/application_event.dart';
 import 'package:my_todo/screens/profile/components/build_item.dart';
 import 'package:my_todo/screens/profile/components/reuse_text.dart';
-import 'package:my_todo/screens/profile/user/bloc/user_bloc.dart';
 import 'package:my_todo/utils/app_color.dart';
 import 'package:my_todo/utils/constans.dart';
 
@@ -26,46 +24,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  File? _image;
-
-  // Future _pickImage(ImageSource source) async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: source);
-  //     if (image == null) return;
-  //     File? img = File(image.path);
-  //     img = await _cropImage(imageFile: img);
-  //     setState(() {
-  //       _image = img;
-  //     });
-  //   } on PlatformException catch (e) {
-  //     print('exception: $e');
-  //   }
-  // }
-  Future _pickImage(ImageSource source) async {
-    try {
-      final picker = ImagePicker();
-      final image = await picker.pickImage(source: source);
-      if (image == null) return;
-
-      // await _cropImage(imageFile: File(image.path));
-      return image.path;
-    } on PlatformException catch (e) {
-      print('exception: $e');
-    }
-  }
-
-  Future<File?> _cropImage({required File imageFile}) async {
-    CroppedFile? croppedImage =
-        await ImageCropper().cropImage(sourcePath: imageFile.path);
-    if (croppedImage == null) return null;
-    return File(croppedImage.path);
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     var textTheme = Theme.of(context).textTheme;
-    var avatarCubit = context.read<AvatarCubit>();
     return SafeArea(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -86,44 +48,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 10.h),
                   GestureDetector(
-                    onTap: () async {
-                      final imagePath = await _pickImage(ImageSource.gallery);
-
-                      if (imagePath != null) {
-                        await _cropImage(imageFile: File(imagePath));
-                        avatarCubit.setImage(imagePath);
-                      }
-                    },
-                    child: BlocBuilder<AvatarCubit, AvatarState>(
-                      builder: (context, state) {
-                        return Container(
-                          height: 80.h,
-                          width: 80.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.amber.shade100,
-                            image: state.imagePath.isEmpty
-                                ? const DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/check_list.png'),
-                                  )
-                                : DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(File(context
-                                        .watch<AvatarCubit>()
-                                        .state
-                                        .imagePath)),
-                                  ),
-                          ),
-                        );
-                      },
+                    onTap: () {},
+                    child: Container(
+                      height: 80.h,
+                      width: 80.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.amber.shade100,
+                      ),
                     ),
                   ),
                   SizedBox(height: 10.h),
                   GestureDetector(
-                    onTap: () {
-                      _pickImage(ImageSource.camera);
-                    },
+                    onTap: () {},
                     child: Text(
                       'User name',
                       style: textTheme.titleSmall,

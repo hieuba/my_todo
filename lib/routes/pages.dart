@@ -14,7 +14,6 @@ import 'package:my_todo/screens/login/bloc/login_bloc.dart';
 import 'package:my_todo/screens/login/login_screen.dart';
 import 'package:my_todo/screens/profile/setting/bloc/setting_bloc.dart';
 import 'package:my_todo/screens/profile/setting/setting_screen.dart';
-import 'package:my_todo/screens/profile/user/bloc/user_bloc.dart';
 import 'package:my_todo/screens/register/bloc/register_bloc.dart';
 import 'package:my_todo/screens/register/register_screen.dart';
 import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
@@ -81,11 +80,6 @@ class AppPages {
       PageEntity(
         bloc: BlocProvider(
           create: (context) => ThemeBloc(),
-        ),
-      ),
-      PageEntity(
-        bloc: BlocProvider(
-          create: (context) => AvatarCubit(),
         ),
       ),
     ];
