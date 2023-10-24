@@ -20,6 +20,7 @@ const Color HEALTH_COLOR = Color(0xff80FFA3);
 const Color MOVIE_COLOR = Color(0xff80D1FF);
 const Color HOME_COLOR = Color(0xffFFCC80);
 const Color NEW_COLOR = Color(0xff80FFD1);
+const Color TASK_COLOR = Color(0xff363636);
 
 var H_PADDING = 24.w;
 var APP_BODER_RADIUS = 4.r;

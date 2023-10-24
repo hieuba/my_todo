@@ -7,7 +7,6 @@ import 'package:my_todo/components/widgets/build_textfield.dart';
 import 'package:my_todo/components/buttons/main_btn.dart';
 import 'package:my_todo/components/buttons/outline_btn.dart';
 import 'package:my_todo/components/widgets/reusable_text.dart';
-import 'package:my_todo/screens/login/login_screen.dart';
 import 'package:my_todo/screens/register/bloc/register_bloc.dart';
 import 'package:my_todo/screens/register/bloc/register_event.dart';
 import 'package:my_todo/screens/register/bloc/register_state.dart';

@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_todo/components/widgets/flutter_toast.dart';
 import 'package:my_todo/global.dart';
-import 'package:my_todo/screens/application/application.dart';
 import 'package:my_todo/screens/login/bloc/login_bloc.dart';
+import 'package:my_todo/services/firebase_auth_sevice.dart';
 import 'package:my_todo/utils/constans.dart';
 
 class LoginController {
@@ -52,12 +54,16 @@ class LoginController {
         var user = credential.user;
 
         if (user != null) {
-          Global.storageService
-              .setString(AppConstants.STORAGE_USER_TOKEN_KEY, '12345678');
+          final token = await getFirebaseAuthToken();
+          print('token: $token');
+          if (token != null) {
+            Global.storageService
+                .setString(AppConstants.STORAGE_USER_TOKEN_KEY, token);
+          }
+
           // we got verified user from firebase
           Navigator.of(context)
               .pushNamedAndRemoveUntil('/application', (route) => false);
-          // ignore: avoid_print
           print('user exist');
         } else {
           // we have error getting user from firebase
