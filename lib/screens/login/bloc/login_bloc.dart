@@ -5,7 +5,7 @@ import 'package:my_todo/screens/login/bloc/login_event.dart';
 import 'package:my_todo/screens/login/bloc/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(const LoginState()) {
+  LoginBloc() : super(const LoginState(email: '', password: '')) {
     on<EmailEvent>(_emailEvent);
 
     on<PasswordEvent>(_passwordEvent);

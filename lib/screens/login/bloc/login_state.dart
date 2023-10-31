@@ -2,7 +2,7 @@ class LoginState {
   final String email;
   final String password;
 
-  const LoginState({this.email = '', this.password = ''});
+  const LoginState({required this.email, required this.password});
 
   LoginState copyWith({
     String? email,
