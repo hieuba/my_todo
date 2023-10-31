@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,21 +12,53 @@ import 'package:my_todo/utils/constans.dart';
 
 class LoginController {
   final BuildContext context;
-  const LoginController({required this.context});
+  late OverlayEntry _overlayEntry;
+  var db = FirebaseFirestore.instance;
+  LoginController({
+    required this.context,
+  });
+
+  void _showLoading() {
+    _overlayEntry = OverlayEntry(
+      builder: (BuildContext context) {
+        return const Stack(
+          children: <Widget>[
+            ModalBarrier(
+              color: Colors.black54,
+              dismissible: false,
+            ),
+            Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
+          ],
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_overlayEntry);
+  }
+
+  void _hideLoading() {
+    _overlayEntry.remove();
+  }
 
   Future<void> handleLogin() async {
     try {
+      // Hiển thị vòng quay chờ đợi
+      _showLoading();
       final state = context.read<LoginBloc>().state;
       final emailAddress = state.email;
       final password = state.password;
 
       if (emailAddress.isEmpty) {
+        _hideLoading(); // Ẩn vòng quay chờ đợi
         // email is empty
         toastInfo(message: 'snackbar_login.emailempty');
         return;
       }
 
       if (password.isEmpty) {
+        _hideLoading(); // Ẩn vòng quay chờ đợi
         // pass is empty
         toastInfo(message: 'snackbar_login.passwordempty');
         return;
@@ -53,8 +86,26 @@ class LoginController {
 
         var user = credential.user;
 
+        // final _user = <String, dynamic>{
+        //   "email": emailAddress,
+        //   "createAt": DateTime.now(),
+        //   "avatar": '',
+        //   "id": user?.uid,
+        // };
+        // print('_user: $_user');
+
+        // // db.collection("users").doc("user.uid").set(_user).then((DocumentReference doc) =>
+        // //     print('DocumentSnapshot added with ID: ${doc.id}'));
+        // await db
+        //     .collection("users")
+        //     .doc(user?.uid ?? "none")
+        //     .set(_user)
+        //     .onError((e, _) => print("Error writing document: $e"));
+
         if (user != null) {
           final token = await getFirebaseAuthToken();
+          // Add a new document with a generated ID
+
           print('token: $token');
           if (token != null) {
             Global.storageService
@@ -70,6 +121,7 @@ class LoginController {
           toastInfo(message: 'snackbar_login.error');
           // return;
         }
+        _hideLoading();
       } on FirebaseAuthException catch (e) {
         print('FirebaseAuthException - code: ${e.code}, message: ${e.message}');
         if (e.code == 'user-not-found') {
@@ -82,6 +134,7 @@ class LoginController {
           print('email k hop le');
           toastInfo(message: 'firebase_auth_exception.invalid_email');
         }
+        _hideLoading();
       }
     } catch (e) {
       //

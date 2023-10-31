@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +9,9 @@ import 'package:my_todo/screens/register/bloc/register_bloc.dart';
 
 class RegisterController {
   final BuildContext context;
+  var db = FirebaseFirestore.instance;
 
-  const RegisterController({required this.context});
+  RegisterController({required this.context});
 
   void handleRegister() async {
     try {
@@ -50,6 +52,24 @@ class RegisterController {
         if (credential.user != null) {
           await credential.user!.sendEmailVerification();
           print('kiem tra email de xac thuc tai khoan');
+
+          final _user = <String, dynamic>{
+            "email": emailAddress,
+            "password": password,
+            "createAt": DateTime.now(),
+            "avatar": '',
+            "id": credential.user!.uid,
+          };
+          print('_user: $_user');
+
+          // db.collection("users").doc("user.uid").set(_user).then((DocumentReference doc) =>
+          //     print('DocumentSnapshot added with ID: ${doc.id}'));
+          await db
+              .collection("users")
+              .doc(credential.user!.uid)
+              .set(_user)
+              .onError((e, _) => print("Error writing document: $e"));
+
           Navigator.of(context).popAndPushNamed('/login');
         }
       } on FirebaseAuthException catch (e) {
