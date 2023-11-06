@@ -6,12 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:my_todo/global.dart';
 import 'package:my_todo/routes/routes.dart';
-import 'package:my_todo/services/localization_checker.dart';
-import 'package:my_todo/test-counter/bloc/counter_bloc.dart';
-import 'package:my_todo/test-counter/bloc/counter_event.dart';
-import 'package:my_todo/test-counter/bloc/counter_state.dart';
 import 'package:my_todo/utils/theme/bloc/theme_bloc.dart';
-import 'package:my_todo/utils/theme/bloc/theme_event.dart';
 import 'package:my_todo/utils/theme/bloc/theme_state.dart';
 import 'package:my_todo/utils/app_theme.dart';
 
@@ -57,70 +52,6 @@ class MyApp extends StatelessWidget {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
-      appBar: AppBar(title: Text(tr('title')), actions: [
-        IconButton(
-            onPressed: () {
-              LocalizationChecker.changeLanguage(context);
-            },
-            icon: const Icon(Icons.swap_calls)),
-        BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, state) {
-            return Switch.adaptive(
-              value: state.switchValue,
-              onChanged: (value) {
-                value
-                    ? context.read<ThemeBloc>().add(ToggleOnEvent())
-                    : context.read<ThemeBloc>().add(ToggleOffEvent());
-              },
-            );
-          },
-        ),
-      ]),
-      body: Center(
-        child: Column(
-          children: [
-            Text('${'name'.tr()} : haha'),
-            Text('${tr("gender.male")}'),
-            Divider(),
-            BlocBuilder<CounterBloc, CounterState>(
-              builder: (context, state) {
-                return Text(BlocProvider.of<CounterBloc>(context)
-                    .state
-                    .number
-                    .toString());
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      BlocProvider.of<CounterBloc>(context)
-                          .add(IncrementEvent());
-                    },
-                    icon: const Icon(Icons.add)),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.remove))
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

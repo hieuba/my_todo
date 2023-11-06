@@ -1,10 +1,21 @@
+// ignore_for_file: prefer_final_fields, deprecated_member_use
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'package:my_todo/components/format_datetime/format_datetime.dart';
+import 'package:my_todo/components/textfield/text_field_custom.dart';
+import 'package:my_todo/components/widgets/flutter_toast.dart';
+import 'package:my_todo/models/task_model.dart';
 import 'package:my_todo/screens/application/bloc/application_bloc.dart';
 import 'package:my_todo/screens/application/bloc/application_event.dart';
 import 'package:my_todo/screens/application/bloc/application_state.dart';
 import 'package:my_todo/screens/application/components/build_page.dart';
+import 'package:my_todo/screens/home/components/guid.dart';
+import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
 import 'package:my_todo/utils/app_color.dart';
 
 class ApplicationScreen extends StatefulWidget {
@@ -15,22 +26,22 @@ class ApplicationScreen extends StatefulWidget {
 }
 
 class _ApplicationScreenState extends State<ApplicationScreen> {
-  TextEditingController _textController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+
+  DateTime dateTime = DateTime.now();
 
   @override
   void dispose() {
-    _textController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-    var size = MediaQuery.sizeOf(context);
-    // ignore: no_leading_underscores_for_local_identifiers
-    final iconColor = Theme.of(context).brightness == Brightness.light
-        ? BLACK_COLOR
-        : WHITE_COLOR;
+    var checkColor = Theme.of(context).brightness == Brightness.light;
+    final iconColor = checkColor ? BLACK_COLOR : WHITE_COLOR;
     return BlocBuilder<ApplicationBloc, ApplicationState>(
       builder: (context, state) {
         return Scaffold(
@@ -48,9 +59,8 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
               unselectedItemColor: iconColor,
               selectedFontSize: 12.sp,
               unselectedFontSize: 12.sp,
-              backgroundColor: Theme.of(context).brightness == Brightness.light
-                  ? Colors.grey.shade200
-                  : const Color(0XFF363636),
+              backgroundColor:
+                  checkColor ? Colors.grey.shade200 : const Color(0XFF363636),
               type: BottomNavigationBarType.fixed,
               currentIndex: state.index,
               onTap: (value) {
@@ -63,153 +73,154 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _showModalBottomSheet();
-            },
-            child: const Icon(
-              Icons.add,
-              color: WHITE_COLOR,
-            ),
-          ),
+          floatingActionButton: state.index == 0
+              ? FloatingActionButton(
+                  onPressed: () {
+                    _showModalBottomSheet();
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: WHITE_COLOR,
+                  ),
+                )
+              : const SizedBox(),
         );
       },
     );
   }
 
+  // method showModalBottomSheet
   void _showModalBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled:
           true, // Set to true to make the sheet take up the entire screen height
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            height: 200.0, // Set the desired height
-            child: Column(
-              children: [
-                const Text('ModalBottomSheet Content'),
-                TextFormField(
-                  controller: _textController,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter something',
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Do something with the text input
-                    print(_textController.text);
-                    // Close the ModalBottomSheet
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
-          ),
-        );
+        final MediaQueryData mediaQueryData = MediaQuery.of(context);
+        final textTheme = Theme.of(context).textTheme;
+        final size = MediaQuery.sizeOf(context);
+
+        return _bottomSheet(mediaQueryData, textTheme, size, context);
       },
     );
   }
 
-/*
-  void _showModalBottomSheet(TextTheme textTheme, Size size) {
-    showModalBottomSheet(
-      backgroundColor: Colors.amber.shade100,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:
-              //  Container(
-              //   height: 228.h,
-              //   child: Column(
-              //     children: [
-              //       Text(
-              //         'Add Task',
-              //         style: textTheme.displayMedium,
-              //       ),
-              //       SizedBox(height: 14.h),
-              //       _textField((value) {}, '', size)
-              //     ],
-              //   ),
-              // ),
-              Column(
+  // showModalBottomSheet
+  Widget _bottomSheet(MediaQueryData mediaQueryData, TextTheme textTheme,
+      Size size, BuildContext context) {
+    return SingleChildScrollView(
+      padding: mediaQueryData.viewInsets,
+      child: Container(
+        padding: EdgeInsets.only(left: H_PADDING, right: H_PADDING, top: 25.h),
+
+        height: 228.h, // Set the desired height
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _textController,
-                focusNode: _focusNode,
-                decoration: InputDecoration(labelText: 'Enter something'),
+              Text(
+                'Add Task',
+                style: textTheme.displayMedium,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // Do something with the text input
-                  print(_textController.text);
-                  // Close the ModalBottomSheet
-                  Navigator.of(context).pop();
-                },
-                child: Text('Submit'),
-              ),
+              SizedBox(height: 14.h),
+              textField('Enter new task', size, _titleController),
+              SizedBox(height: 14.h),
+              textField('Description', size, _descriptionController),
+              SizedBox(height: 14.h),
+              Row(
+                children: [
+                  _buildIcon(
+                    iconPath: 'assets/svgs/timer.svg',
+                    onTap: () => _pickDateTime(context),
+                  ),
+                  SizedBox(width: 32.w),
+                  _buildIcon(
+                    iconPath: 'assets/svgs/tag.svg',
+                    onTap: () {},
+                  ),
+                  SizedBox(width: 32.w),
+                  const Spacer(),
+                  _buildIcon(
+                    iconPath: 'assets/svgs/send.svg',
+                    type: 'send',
+                    onTap: () {
+                      var task = TaskModel(
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                        id: GUIDGen.generate(),
+                        date: formatDateTime(dateTime),
+                        index: '',
+                      );
+                      context.read<TaskBloc>().add(AddTask(task: task));
+                      Navigator.of(context).pop();
+                      toastInfo(message: 'Thêm Task thành công!');
+                      _titleController.clear();
+                      _descriptionController.clear();
+                    },
+                  )
+                ],
+              )
             ],
-          ),
-        );
-      },
-    );
-    // Set focus to the text input when the ModalBottomSheet is shown
-    _focusNode.requestFocus();
-  }
-*/
-  Widget _textField(void Function(String)? func, String hintText, Size size) {
-    return Container(
-      height: size.height * .07,
-      width: size.width,
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xffA8B2BD)),
-        borderRadius: BorderRadius.circular(6.w),
-        color: Colors.amber,
-      ),
-      child: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: TextField(
-          controller: _textController,
-          textInputAction: TextInputAction.done,
-          onChanged: (value) => func!(value),
-          keyboardType: TextInputType.multiline,
-          autocorrect: false,
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.clear,
-              ),
-            ),
-            hintText: hintText,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            disabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.transparent,
-              ),
-            ),
-            hintStyle: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xffBABABA),
-            ),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildIcon(
+      {required String iconPath, String? type, required VoidCallback onTap}) {
+    var color = Theme.of(context).brightness == Brightness.light;
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+          height: 24.h,
+          width: 24.w,
+          child: SvgPicture.asset(
+            iconPath,
+            fit: BoxFit.cover,
+            color: type == 'send'
+                ? PRIMARY_COLOR
+                : color
+                    ? BLACK_COLOR
+                    : GRAY_COLOR,
+          )),
+    );
+  }
+
+  // pick DateTime
+  Future _pickDateTime(BuildContext context) async {
+    DateTime? date = await _pickDate();
+    if (date == null) return;
+
+    TimeOfDay? time = await _pickTime();
+    if (time == null) return;
+
+    final newDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    setState(() {
+      dateTime = newDateTime;
+    });
+  }
+
+  Future<DateTime?> _pickDate() => showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2030));
+
+  Future<TimeOfDay?> _pickTime() => showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+      );
 }

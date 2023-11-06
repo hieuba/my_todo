@@ -1,94 +1,150 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'package:my_todo/models/task_model.dart';
+import 'package:my_todo/screens/home/components/build_appbar.dart';
+import 'package:my_todo/screens/home/components/compeleted_task.dart';
+import 'package:my_todo/screens/home/components/pending_task.dart';
+import 'package:my_todo/screens/home/components/search_box.dart';
+import 'package:my_todo/screens/home/components/task_tile.dart';
+import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
+import 'package:my_todo/screens/home/task_detail/task_detail.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  String? image = '';
+  bool isLoading = false;
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    _getAvatarFromFirebase();
+    _tabController = TabController(vsync: this, length: 2);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     var size = MediaQuery.sizeOf(context);
+    var checkColor = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildAppBar(size, textTheme),
-            _checkList(textTheme),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: H_PADDING),
+          child: Column(
+            children: [
+              buildAppBar(size, textTheme, context, image, isLoading),
+              _buildSearch(textTheme),
+              TabBar(
+                indicatorPadding: EdgeInsets.symmetric(horizontal: 25.w),
+                controller: _tabController,
+                indicatorColor: PRIMARY_COLOR,
+                labelColor: checkColor ? BLACK_COLOR : GRAY_COLOR,
+                labelStyle: textTheme.titleMedium,
+                tabs: const [
+                  Tab(
+                    text: 'Đang thực hiện',
+                    height: 50,
+                  ),
+                  Tab(
+                    text: 'Hoàn thành',
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    pendingTask(context),
+                    compeletedTask(context),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-Widget _buildAppBar(Size size, TextTheme textTheme) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: H_PADDING),
-    child: SizedBox(
-      height: 42.h,
-      width: size.width,
-      child: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 24.h,
-                width: 24.w,
-                child: Image.asset(
-                  'assets/icons/sort.png',
-                  fit: BoxFit.cover,
+  Widget _buildSearch(TextTheme textTheme) {
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () {
+            showSearch(
+              context: context,
+              delegate: CustomSearch(taskData: [
+                ...state.pendingTasks,
+                ...state.compeletedTasks,
+              ], textTheme: textTheme),
+            );
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: 10.h),
+            height: 50.h,
+            decoration: BoxDecoration(
+              border: Border.all(color: PRIMARY_COLOR),
+              borderRadius: BorderRadius.circular(APP_BODER_RADIUS),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                  child: SvgPicture.asset(
+                    'assets/svgs/search-normal.svg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Index',
-                  style: textTheme.displayMedium!
-                      .copyWith(fontWeight: FontWeight.w400),
-                ),
-              ),
-              Container(
-                height: 42.h,
-                width: 40.w,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ],
+                Text(
+                  'Search for your task...',
+                  style: textTheme.titleSmall!.copyWith(color: HINT_COLOR),
+                )
+              ],
+            ),
           ),
-        ],
-      ),
-    ),
-  );
-}
+        );
+      },
+    );
+  }
 
-Widget _checkList(TextTheme textTheme) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Container(
-        margin: EdgeInsets.only(top: 100.h),
-        height: 227.h,
-        width: 227.w,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/check_list.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      SizedBox(height: 10.h),
-      Text(
-        'What do you want to do today?',
-        style: textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w400),
-      ),
-      SizedBox(height: 10.h),
-      Text(
-        'Tap + to add your tasks',
-        style: textTheme.displaySmall,
-      ),
-    ],
-  );
+  Future _getAvatarFromFirebase() async {
+    setState(() {
+      isLoading = true; // Bắt đầu hiển thị vòng quay chờ
+    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        setState(() {
+          image = value.data()!['avatar'];
+          isLoading = false;
+        });
+      }
+    });
+  }
 }

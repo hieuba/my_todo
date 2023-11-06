@@ -1,7 +1,12 @@
-import 'package:easy_localization/easy_localization.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:my_todo/screens/profile/components/build_item.dart';
 import 'package:my_todo/screens/profile/components/reuse_text.dart';
 import 'package:my_todo/screens/profile/setting/bloc/setting_bloc.dart';
@@ -56,7 +61,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 size: size,
                 textTheme: textTheme,
                 text: tr('bottomsheet.theme'),
-                iconPath: 'assets/icons/brush.png',
+                iconPath: 'assets/svgs/brush.svg',
                 onTap: () {
                   showModalBottomSheet(
                     shape: const RoundedRectangleBorder(
@@ -75,7 +80,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 size: size,
                 textTheme: textTheme,
                 text: tr('bottomsheet.language'),
-                iconPath: 'assets/icons/language-square.png',
+                iconPath: 'assets/svgs/language-square.svg',
                 onTap: () {
                   showModalBottomSheet(
                     shape: const RoundedRectangleBorder(
@@ -93,8 +98,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 context: context,
                 size: size,
                 textTheme: textTheme,
-                text: 'Import from Google calendar',
-                iconPath: 'assets/icons/import.png',
+                text: 'Import from Google Calendar',
+                iconPath: 'assets/svgs/import.svg',
                 onTap: () {},
               ),
             ],
@@ -137,14 +142,16 @@ class _SettingScreenState extends State<SettingScreen> {
                   height: 50.h,
                   child: Row(
                     children: [
-                      SizedBox(width: 10.w),
                       Card(
-                        color: Colors.transparent,
-                        child: Text(
-                          tr(
-                            'bottomsheet.text_theme',
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            tr(
+                              'bottomsheet.text_theme',
+                            ),
+                            style: textTheme.titleSmall!
+                                .copyWith(color: PRIMARY_COLOR),
                           ),
-                          style: textTheme.titleSmall,
                         ),
                       ),
                       // light theme
@@ -154,17 +161,13 @@ class _SettingScreenState extends State<SettingScreen> {
                           context.read<ThemeBloc>().add(ToggleOffEvent());
                         },
                         child: Card(
-                          color: isLightThemeSelected
-                              ? PRIMARY_COLOR
-                              : Colors.transparent,
-                          child: SizedBox(
-                            height: 24.h,
-                            width: 50.w,
-                            child: Center(
-                              child: Text(
-                                tr('bottomsheet.light'),
-                                style: textTheme.titleMedium,
-                              ),
+                          color: isLightThemeSelected ? SPORT_COLOR : null,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child: Text(
+                              tr('bottomsheet.light'),
+                              style: textTheme.titleSmall!
+                                  .copyWith(color: PRIMARY_COLOR),
                             ),
                           ),
                         ),
@@ -176,17 +179,13 @@ class _SettingScreenState extends State<SettingScreen> {
                           context.read<ThemeBloc>().add(ToggleOnEvent());
                         },
                         child: Card(
-                          color: isLightThemeSelected
-                              ? Colors.transparent
-                              : PRIMARY_COLOR,
-                          child: SizedBox(
-                            height: 24.h,
-                            width: 50.w,
-                            child: Center(
-                              child: Text(
-                                tr('bottomsheet.dark'),
-                                style: textTheme.titleMedium,
-                              ),
+                          color: isLightThemeSelected ? null : GREY1_COLOR,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child: Text(
+                              tr('bottomsheet.dark'),
+                              style: textTheme.titleSmall!
+                                  .copyWith(color: PRIMARY_COLOR),
                             ),
                           ),
                         ),
@@ -292,6 +291,7 @@ Widget _buildAppBar(
   BuildContext context,
   TextTheme textTheme,
 ) {
+  var color = Theme.of(context).brightness == Brightness.light;
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: H_PADDING),
     child: Container(
@@ -308,11 +308,10 @@ Widget _buildAppBar(
               alignment: Alignment.centerLeft,
               height: 45.h,
               width: 45.w,
-              child: Image.asset(
-                'assets/icons/arrow-left.png',
-                color: Theme.of(context).brightness == Brightness.light
-                    ? BLACK_COLOR
-                    : GRAY_COLOR,
+              child: SvgPicture.asset(
+                'assets/svgs/arrow-left.svg',
+                fit: BoxFit.cover,
+                color: color ? BLACK_COLOR : WHITE_COLOR,
               ),
             ),
             Align(

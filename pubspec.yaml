@@ -51,6 +51,8 @@ dependencies:
   image_cropper: ^5.0.0
   firebase_storage: ^11.4.0
   cloud_firestore: ^4.12.1
+  equatable: ^2.0.5
+  flutter_svg: ^2.0.9
 
   
 
@@ -96,6 +98,7 @@ flutter:
     - assets/images/intro/
     - assets/translations/
     - assets/icons/
+    - assets/svgs/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

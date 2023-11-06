@@ -12,4 +12,6 @@ class AppRoutes {
   static const COUNTER = '/counter';
 
   static const SETTINGS = '/setting';
+
+  static const HOMEPAGE = '/homepage';
 }
