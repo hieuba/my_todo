@@ -1,6 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:my_todo/utils/app_color.dart';
 
 Widget buildItem({
@@ -12,9 +15,7 @@ Widget buildItem({
   required BuildContext context,
   String? type,
 }) {
-  var iconColor = Theme.of(context).brightness == Brightness.light
-      ? BLACK_COLOR
-      : GRAY_COLOR;
+  var color = Theme.of(context).brightness == Brightness.light;
   return InkWell(
     onTap: onTap,
     child: SizedBox(
@@ -28,9 +29,14 @@ Widget buildItem({
             SizedBox(
               height: 24.h,
               width: 24.w,
-              child: Image.asset(
+              child: SvgPicture.asset(
                 iconPath,
-                color: type == 'logout' ? Colors.red : iconColor,
+                fit: BoxFit.cover,
+                color: type == 'logout'
+                    ? ERROR_COLOR
+                    : color
+                        ? BLACK_COLOR
+                        : WHITE_COLOR,
               ),
             ),
             SizedBox(width: 10.h),
@@ -38,14 +44,18 @@ Widget buildItem({
               tr(text),
               style: textTheme.titleMedium!.copyWith(
                   color: type == "logout"
-                      ? Colors.red
+                      ? ERROR_COLOR
                       : textTheme.titleMedium!.color),
             ),
             const Spacer(),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 20.sp,
-              color: iconColor,
+            SizedBox(
+              height: 24.h,
+              width: 24.w,
+              child: SvgPicture.asset(
+                'assets/svgs/arrow-right.svg',
+                fit: BoxFit.cover,
+                color: color ? BLACK_COLOR : WHITE_COLOR,
+              ),
             ),
           ],
         ),

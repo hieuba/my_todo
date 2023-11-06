@@ -98,11 +98,7 @@ class LoginScreen extends StatelessWidget {
                       textTheme: textTheme,
                       type: 'google',
                       iconPath: 'assets/icons/google.png',
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ));
-                      },
+                      onTap: () {},
                     ),
                     SizedBox(height: 20.h),
                     outlineBtn(

@@ -1,10 +1,11 @@
 // ignore_for_file: avoid_print, unused_field, use_build_context_synchronously
 
 import 'dart:io';
+import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +13,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:my_todo/components/dialog/dialog_custom.dart';
 import 'package:my_todo/global.dart';
 import 'package:my_todo/routes/routes.dart';
 import 'package:my_todo/screens/application/bloc/application_bloc.dart';
 import 'package:my_todo/screens/application/bloc/application_event.dart';
-import 'package:my_todo/screens/login/login_controller.dart';
-import 'package:my_todo/screens/profile/avatar/cubit/avatar_cubit.dart';
+import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
 import 'package:my_todo/screens/profile/components/build_item.dart';
 import 'package:my_todo/screens/profile/components/reuse_text.dart';
 import 'package:my_todo/screens/profile/components/select_photo.dart';
@@ -35,10 +36,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? _image;
   var db = FirebaseFirestore.instance;
   String? image = '';
+  bool isLoading = false;
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
+      var image = await ImagePicker().pickImage(source: source);
       if (image == null) {
         return;
       }
@@ -52,7 +54,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       setState(() {
         _image = img;
-        Navigator.of(context).pop();
+        // Update the avatar image immediately when it's picked
+        // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
       print(e);
@@ -85,8 +88,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             .update({
           "avatar": avatarUrl,
         });
-
-        print('avatar::: $avatarUrl');
+        // Set state to update the UI immediately
+        setState(() {
+          image = avatarUrl;
+        });
       }
     } on PlatformException catch (e) {
       print(e);
@@ -101,6 +106,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future _getAvatarFromFirebase() async {
+    setState(() {
+      isLoading = true; // Bắt đầu hiển thị vòng quay chờ
+    });
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -109,6 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (value.exists) {
         setState(() {
           image = value.data()!['avatar'];
+          isLoading = false; // Kết thúc hiển thị vòng quay chờ khi hoàn thành
         });
       }
     });
@@ -126,8 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var textTheme = Theme.of(context).textTheme;
     User? user = FirebaseAuth.instance.currentUser;
     String? displayGmail = user != null ? (user.email) : 'loi';
-    print('username: $displayGmail');
-    print('avatarUrl: $image');
+    var color = Theme.of(context).brightness == Brightness.light;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -144,31 +152,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Profile',
+                    tr('profile.title'),
                     style: textTheme.titleSmall,
                   ),
                   SizedBox(height: 10.h),
                   GestureDetector(
-                    onTap: () {
-                      _showSelectPhotoOptions(context);
-                    },
-                    child: Container(
-                      height: 80.h,
-                      width: 80.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: PRIMARY_COLOR,
-                        image: (image == null || image == '')
-                            ? const DecorationImage(
-                                image:
-                                    AssetImage('assets/images/check_list.png'),
-                              )
-                            : DecorationImage(
-                                image: NetworkImage(image!),
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
+                    onTap: () {},
+                    child: isLoading
+                        ? SizedBox(
+                            height: 80.h,
+                            width: 80.w,
+                            child: const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          )
+                        : Container(
+                            height: 80.h,
+                            width: 80.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              // color: PRIMARY_COLOR,
+                              image: image == null || image == ''
+                                  ? const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/check_list.png'),
+                                    )
+                                  : DecorationImage(
+                                      image: NetworkImage(image!),
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
                   ),
                   SizedBox(height: 10.h),
                   Text(
@@ -185,19 +199,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 58.h,
                           width: size.width * .4,
                           decoration: BoxDecoration(
-                              color: TASK_COLOR,
+                              color: color ? GREY1_COLOR : TASK_COLOR,
                               borderRadius:
                                   BorderRadius.circular(APP_BODER_RADIUS)),
-                          child: const Center(
-                            child: Text('10 tash left'),
+                          child: Center(
+                            child: Text(
+                              '${context.read<TaskBloc>().state.pendingTasks.length.toString()} Task left',
+                              style: textTheme.titleSmall,
+                            ),
                           ),
                         ),
                         Container(
                           height: 58.h,
                           width: size.width * .4,
-                          color: TASK_COLOR,
-                          child: const Center(
-                            child: Text('5 tash done'),
+                          color: color ? GREY1_COLOR : TASK_COLOR,
+                          child: Center(
+                            child: Text(
+                              '${context.read<TaskBloc>().state.compeletedTasks.length.toString()} Task done',
+                              style: textTheme.titleSmall,
+                            ),
                           ),
                         )
                       ],
@@ -213,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'profile.settings',
-              iconPath: 'assets/icons/setting.png',
+              iconPath: 'assets/svgs/setting-2.svg',
               onTap: () {
                 Navigator.pushNamed(context, '/setting');
               },
@@ -226,8 +246,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'profile.changepass',
-              iconPath: 'assets/icons/key.png',
+              iconPath: 'assets/svgs/key.svg',
               onTap: () {},
+            ),
+            buildItem(
+              context: context,
+              size: size,
+              textTheme: textTheme,
+              text: 'profile.changeimage',
+              iconPath: 'assets/svgs/camera.svg',
+              onTap: () {
+                _showSelectPhotoOptions(context);
+              },
             ),
             // ------
             reusableText(text: 'UpTodo', textTheme: textTheme),
@@ -236,7 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'About US',
-              iconPath: 'assets/icons/menu.png',
+              iconPath: 'assets/svgs/menu.svg',
               onTap: () {},
             ),
             buildItem(
@@ -244,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'FAQ',
-              iconPath: 'assets/icons/info-circle.png',
+              iconPath: 'assets/svgs/info-circle.svg',
               onTap: () {},
             ),
             buildItem(
@@ -252,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'Help & Feedback',
-              iconPath: 'assets/icons/flash.png',
+              iconPath: 'assets/svgs/flash.svg',
               onTap: () {},
             ),
             buildItem(
@@ -260,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'Support US',
-              iconPath: 'assets/icons/like.png',
+              iconPath: 'assets/svgs/like.svg',
               onTap: () {},
             ),
             buildItem(
@@ -268,26 +298,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: size,
               textTheme: textTheme,
               text: 'profile.logout',
-              iconPath: 'assets/icons/logout.png',
+              iconPath: 'assets/svgs/logout.svg',
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return AlertDialog(
-                      title: Text('THONG BAO'),
-                      content: Text('BAN CO MUON DANG XUAT KHONG'),
-                      actions: [
-                        TextButton(
-                          onPressed: removeUserData,
-                          child: Text('yes'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('no'),
-                        ),
-                      ],
+                    return DialogCustom(
+                      cancle: () {
+                        Navigator.of(context).pop();
+                      },
+                      content: 'Do you want to log out?',
+                      done: removeUserData,
+                      title: 'Notification',
                     );
                   },
                 );
@@ -317,41 +339,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           top: Radius.circular(25.0),
         ),
       ),
-      builder: (context) => DraggableScrollableSheet(
-          initialChildSize: 0.28,
-          maxChildSize: 0.4,
-          minChildSize: 0.28,
-          expand: false,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: SelectPhotoOptionsScreen(
-                onTap: pickImage,
-              ),
-            );
-          }),
+      builder: (context) => SingleChildScrollView(
+        child: SelectPhotoOptionsScreen(
+          onTap: pickImage,
+        ),
+      ),
     );
   }
 }
-
-
-  // BlocBuilder<AvatarBloc, File?>(
-                    //   builder: (context, avatarFile) {
-                    //     return  Container(
-                    //       height: 80.h,
-                    //       width: 80.w,
-                    //       decoration: BoxDecoration(
-                    //         shape: BoxShape.circle,
-                    //         color: Colors.amber,
-                    //         image: avatarFile == null
-                    //             ? const DecorationImage(
-                    //                 image: AssetImage(
-                    //                     'assets/images/check_list.png'),
-                    //               )
-                    //             : DecorationImage(
-                    //                 image: FileImage(avatarFile),
-                    //                 fit: BoxFit.cover),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),

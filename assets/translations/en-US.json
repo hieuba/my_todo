@@ -40,7 +40,9 @@
         "settings" : "Settings",
         "account" : "Account",
         "changepass" : "Change password",
-        "logout" : "Log out"
+        "changeimage" : "Change avatar",
+        "logout" : "Log out",
+        "title" : "Profile"
     },
     "bottomsheet": {
         "language" : "Change app language",

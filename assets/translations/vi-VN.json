@@ -39,7 +39,9 @@
         "settings" : "Cài đặt",
         "account" : "Tài khoản",
         "changepass" : "Đổi mật khẩu",
-        "logout" : "Đăng xuất"
+        "changeimage" : "Đổi ảnh đại diện",
+        "logout" : "Đăng xuất",
+        "title" : "Cá nhân"
     },
     "bottomsheet": {
         "language" : "Thay đổi ngôn ngữ",

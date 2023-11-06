@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_todo/utils/app_color.dart';
 
 class SelectPhotoOptionsScreen extends StatelessWidget {
   final Function(ImageSource source) onTap;
@@ -11,51 +13,39 @@ class SelectPhotoOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.grey.shade300,
-      padding: const EdgeInsets.all(20),
-      child: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        clipBehavior: Clip.none,
+      padding: EdgeInsets.only(left: H_PADDING, right: H_PADDING, bottom: 24.h),
+      child: Column(
         children: [
-          Positioned(
-            top: -35,
-            child: Container(
-              width: 50,
-              height: 6,
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2.5),
-                color: Colors.white,
+          SizedBox(
+            height: 35.h,
+            child: Center(
+              child: Container(
+                height: 5.h,
+                width: 50.w,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: PRIMARY_COLOR,
+                ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Column(children: [
-            SelectPhoto(
-              onTap: () => onTap(ImageSource.gallery),
-              icon: Icons.image,
-              textLabel: 'Browse Gallery',
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Center(
-              child: Text(
-                'OR',
-                style: TextStyle(fontSize: 18),
+          Column(
+            children: [
+              SelectPhoto(
+                onTap: () => onTap(ImageSource.gallery),
+                icon: Icons.image,
+                textLabel: 'Browse Gallery',
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SelectPhoto(
-              onTap: () => onTap(ImageSource.camera),
-              icon: Icons.camera_alt_outlined,
-              textLabel: 'Use a Camera',
-            ),
-          ])
+              SizedBox(
+                height: 10.h,
+              ),
+              SelectPhoto(
+                onTap: () => onTap(ImageSource.camera),
+                icon: Icons.camera_alt_outlined,
+                textLabel: 'Use a Camera',
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -77,38 +67,29 @@ class SelectPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        elevation: 10,
-        primary: Colors.grey.shade200,
-        shape: const StadiumBorder(),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 6,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Icon(
-              icon,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 14,
-            ),
-            Text(
-              textLabel,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black,
+    return Card(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
+              height: 50.h,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(APP_BODER_RADIUS)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon),
+                  SizedBox(width: 10.w),
+                  Text(
+                    textLabel,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  )
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
