@@ -11,6 +11,7 @@ import 'package:my_todo/utils/app_color.dart';
 class CustomSearch extends SearchDelegate {
   List<TaskModel> taskData;
   TextTheme textTheme;
+
   CustomSearch({
     required this.taskData,
     required this.textTheme,
@@ -37,7 +38,7 @@ class CustomSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    var checkColor = Theme.of(context).brightness == Brightness.light;
+    var color = Theme.of(context).brightness == Brightness.light;
     List<TaskModel> matchQuery = [];
     for (var item in taskData) {
       if (item.title.toLowerCase().contains(query.toLowerCase())) {
@@ -57,6 +58,7 @@ class CustomSearch extends SearchDelegate {
                   builder: (context) => TaskDetail(
                     task: result,
                     index: index,
+                    type: 'pending',
                   ),
                 ),
               );
@@ -64,7 +66,7 @@ class CustomSearch extends SearchDelegate {
             child: Container(
               margin: EdgeInsets.only(bottom: 16.h),
               decoration: BoxDecoration(
-                  color: checkColor ? GREY1_COLOR : TASK_COLOR,
+                  color: color ? GREY1_COLOR : TASK_COLOR,
                   borderRadius: BorderRadius.circular(APP_BODER_RADIUS)),
               height: 72.h,
               width: double.infinity,
@@ -146,9 +148,7 @@ class CustomSearch extends SearchDelegate {
                                       child: SvgPicture.asset(
                                         'assets/svgs/flag.svg',
                                         fit: BoxFit.cover,
-                                        color: checkColor
-                                            ? BLACK_COLOR
-                                            : GRAY_COLOR,
+                                        color: color ? BLACK_COLOR : GRAY_COLOR,
                                       ),
                                     ),
                                     Text('${index + 1}'),
@@ -172,7 +172,7 @@ class CustomSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var checkColor = Theme.of(context).brightness == Brightness.light;
+    var color = Theme.of(context).brightness == Brightness.light;
     List<TaskModel> matchQuery = [];
     for (var item in taskData) {
       if (item.title.toLowerCase().contains(query.toLowerCase())) {
@@ -194,6 +194,7 @@ class CustomSearch extends SearchDelegate {
                   builder: (context) => TaskDetail(
                     task: result,
                     index: index,
+                    type: 'pending',
                   ),
                 ),
               );
@@ -201,7 +202,7 @@ class CustomSearch extends SearchDelegate {
             child: Container(
               margin: EdgeInsets.only(top: 15.h),
               decoration: BoxDecoration(
-                  color: checkColor ? GREY1_COLOR : TASK_COLOR,
+                  color: color ? GREY1_COLOR : TASK_COLOR,
                   borderRadius: BorderRadius.circular(APP_BODER_RADIUS)),
               height: 72.h,
               width: double.infinity,
@@ -236,34 +237,34 @@ class CustomSearch extends SearchDelegate {
                             children: [
                               Text(result.date, style: textTheme.titleMedium),
                               const Spacer(),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    borderRadius: BorderRadius.circular(
-                                        APP_BODER_RADIUS)),
-                                height: 37.h,
-                                child: Center(
-                                    child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 16.w),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 24.h,
-                                        width: 24.w,
-                                        color: Colors.purple,
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      Text(
-                                        '123',
-                                        style: textTheme.titleSmall!.copyWith(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                              ),
+                              // Container(
+                              //   decoration: BoxDecoration(
+                              //       color: Colors.amber,
+                              //       borderRadius: BorderRadius.circular(
+                              //           APP_BODER_RADIUS)),
+                              //   height: 37.h,
+                              //   child: Center(
+                              //       child: Padding(
+                              //     padding:
+                              //         EdgeInsets.symmetric(horizontal: 16.w),
+                              //     child: Row(
+                              //       children: [
+                              //         Container(
+                              //           height: 24.h,
+                              //           width: 24.w,
+                              //           color: Colors.purple,
+                              //         ),
+                              //         SizedBox(width: 5.w),
+                              //         Text(
+                              //           '123',
+                              //           style: textTheme.titleSmall!.copyWith(
+                              //               fontSize: 12.sp,
+                              //               fontWeight: FontWeight.w400),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   )),
+                              // ),
                               SizedBox(width: 15.w),
                               Container(
                                 height: 29.h,
@@ -283,9 +284,7 @@ class CustomSearch extends SearchDelegate {
                                       child: SvgPicture.asset(
                                         'assets/svgs/flag.svg',
                                         fit: BoxFit.cover,
-                                        color: checkColor
-                                            ? BLACK_COLOR
-                                            : GRAY_COLOR,
+                                        color: color ? BLACK_COLOR : GRAY_COLOR,
                                       ),
                                     ),
                                     Text('${index + 1}'),

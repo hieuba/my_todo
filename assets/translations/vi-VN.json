@@ -49,5 +49,13 @@
         "text_theme": "Chủ đề",
         "dark": "Tối",
         "light" : "Sáng"
-    } 
+    },
+    "tabs" : {
+        "pending" : "Đang thực hiện",
+        "compeleted" : "Đã hoàn thành"
+    },
+    "edit" : {
+        "cancle" : "Huỷ",
+        "save" : "Lưu"
+    }
 }

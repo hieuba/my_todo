@@ -5,6 +5,7 @@ import 'package:my_todo/utils/app_color.dart';
 
 class SelectPhotoOptionsScreen extends StatelessWidget {
   final Function(ImageSource source) onTap;
+
   const SelectPhotoOptionsScreen({
     Key? key,
     required this.onTap,

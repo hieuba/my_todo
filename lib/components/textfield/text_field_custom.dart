@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget textField(String hintText, Size size, TextEditingController controller) {
+Widget textField(
+  String hintText,
+  Size size,
+  TextEditingController textController,
+) {
   return Container(
     height: 50.h,
     width: size.width,
@@ -16,7 +20,7 @@ Widget textField(String hintText, Size size, TextEditingController controller) {
       child: TextField(
         cursorColor: PRIMARY_COLOR,
         autofocus: true,
-        controller: controller,
+        controller: textController,
         keyboardType: TextInputType.multiline,
         autocorrect: false,
         decoration: InputDecoration(

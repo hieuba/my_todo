@@ -10,7 +10,7 @@ import 'package:my_todo/screens/profile/profile_screen.dart';
 Widget buildPage(int index) {
   List<Widget> _widgets = [
     const HomeScreen(),
-    const Calendar(),
+    Calendar(),
     const Center(child: Text('abc')),
     const Center(child: Text('focus')),
     const ProfileScreen(),
@@ -86,7 +86,7 @@ List<BottomNavigationBarItem> bottomBar(BuildContext context, Color iconColor) {
         height: 24.h,
         width: 24.w,
         child: SvgPicture.asset(
-          'assets/svgs/user_outline.svg',
+          'assets/svgs/user_o.svg',
           color: iconColor,
         ),
       ),
@@ -94,7 +94,7 @@ List<BottomNavigationBarItem> bottomBar(BuildContext context, Color iconColor) {
         height: 24.h,
         width: 24.w,
         child: SvgPicture.asset(
-          'assets/svgs/user_outline.svg',
+          'assets/svgs/user_b.svg',
           color: iconColor,
         ),
       ),

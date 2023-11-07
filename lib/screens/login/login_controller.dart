@@ -86,22 +86,6 @@ class LoginController {
 
         var user = credential.user;
 
-        // final _user = <String, dynamic>{
-        //   "email": emailAddress,
-        //   "createAt": DateTime.now(),
-        //   "avatar": '',
-        //   "id": user?.uid,
-        // };
-        // print('_user: $_user');
-
-        // // db.collection("users").doc("user.uid").set(_user).then((DocumentReference doc) =>
-        // //     print('DocumentSnapshot added with ID: ${doc.id}'));
-        // await db
-        //     .collection("users")
-        //     .doc(user?.uid ?? "none")
-        //     .set(_user)
-        //     .onError((e, _) => print("Error writing document: $e"));
-
         if (user != null) {
           final token = await getFirebaseAuthToken();
           // Add a new document with a generated ID

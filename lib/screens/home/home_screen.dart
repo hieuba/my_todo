@@ -1,19 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:my_todo/models/task_model.dart';
 import 'package:my_todo/screens/home/components/build_appbar.dart';
 import 'package:my_todo/screens/home/components/compeleted_task.dart';
 import 'package:my_todo/screens/home/components/pending_task.dart';
 import 'package:my_todo/screens/home/components/search_box.dart';
-import 'package:my_todo/screens/home/components/task_tile.dart';
 import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
-import 'package:my_todo/screens/home/task_detail/task_detail.dart';
 import 'package:my_todo/utils/app_color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController _tabController;
   String? image = '';
   bool isLoading = false;
-  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -47,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     var size = MediaQuery.sizeOf(context);
-    var checkColor = Theme.of(context).brightness == Brightness.light;
+    var color = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -60,15 +57,15 @@ class _HomeScreenState extends State<HomeScreen>
                 indicatorPadding: EdgeInsets.symmetric(horizontal: 25.w),
                 controller: _tabController,
                 indicatorColor: PRIMARY_COLOR,
-                labelColor: checkColor ? BLACK_COLOR : GRAY_COLOR,
+                labelColor: color ? BLACK_COLOR : GRAY_COLOR,
                 labelStyle: textTheme.titleMedium,
-                tabs: const [
+                tabs: [
                   Tab(
-                    text: 'Đang thực hiện',
+                    text: tr('tabs.pending'),
                     height: 50,
                   ),
                   Tab(
-                    text: 'Hoàn thành',
+                    text: tr('tabs.compeleted'),
                   ),
                 ],
               ),

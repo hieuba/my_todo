@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:my_todo/components/format_datetime/format_datetime.dart';
 import 'package:my_todo/components/textfield/text_field_custom.dart';
 import 'package:my_todo/components/widgets/flutter_toast.dart';
 import 'package:my_todo/models/task_model.dart';
@@ -40,8 +39,8 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var checkColor = Theme.of(context).brightness == Brightness.light;
-    final iconColor = checkColor ? BLACK_COLOR : WHITE_COLOR;
+    var color = Theme.of(context).brightness == Brightness.light;
+    final iconColor = color ? BLACK_COLOR : WHITE_COLOR;
     return BlocBuilder<ApplicationBloc, ApplicationState>(
       builder: (context, state) {
         return Scaffold(
@@ -60,7 +59,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
               selectedFontSize: 12.sp,
               unselectedFontSize: 12.sp,
               backgroundColor:
-                  checkColor ? Colors.grey.shade200 : const Color(0XFF363636),
+                  color ? Colors.grey.shade200 : const Color(0XFF363636),
               type: BottomNavigationBarType.fixed,
               currentIndex: state.index,
               onTap: (value) {
@@ -73,17 +72,15 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: state.index == 0
-              ? FloatingActionButton(
-                  onPressed: () {
-                    _showModalBottomSheet();
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    color: WHITE_COLOR,
-                  ),
-                )
-              : const SizedBox(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _showModalBottomSheet();
+            },
+            child: const Icon(
+              Icons.add,
+              color: WHITE_COLOR,
+            ),
+          ),
         );
       },
     );
@@ -111,8 +108,12 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
   }
 
   // showModalBottomSheet
-  Widget _bottomSheet(MediaQueryData mediaQueryData, TextTheme textTheme,
-      Size size, BuildContext context) {
+  Widget _bottomSheet(
+    MediaQueryData mediaQueryData,
+    TextTheme textTheme,
+    Size size,
+    BuildContext context,
+  ) {
     return SingleChildScrollView(
       padding: mediaQueryData.viewInsets,
       child: Container(
@@ -139,10 +140,10 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                     onTap: () => _pickDateTime(context),
                   ),
                   SizedBox(width: 32.w),
-                  _buildIcon(
-                    iconPath: 'assets/svgs/tag.svg',
-                    onTap: () {},
-                  ),
+                  // _buildIcon(
+                  //   iconPath: 'assets/svgs/tag.svg',
+                  //   onTap: () {},
+                  // ),
                   SizedBox(width: 32.w),
                   const Spacer(),
                   _buildIcon(
@@ -153,7 +154,7 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
                         title: _titleController.text,
                         description: _descriptionController.text,
                         id: GUIDGen.generate(),
-                        date: formatDateTime(dateTime),
+                        date: dateTime.toString(),
                         index: '',
                       );
                       context.read<TaskBloc>().add(AddTask(task: task));
@@ -172,23 +173,27 @@ class _ApplicationScreenState extends State<ApplicationScreen> {
     );
   }
 
-  Widget _buildIcon(
-      {required String iconPath, String? type, required VoidCallback onTap}) {
+  Widget _buildIcon({
+    required String iconPath,
+    String? type,
+    required VoidCallback onTap,
+  }) {
     var color = Theme.of(context).brightness == Brightness.light;
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-          height: 24.h,
-          width: 24.w,
-          child: SvgPicture.asset(
-            iconPath,
-            fit: BoxFit.cover,
-            color: type == 'send'
-                ? PRIMARY_COLOR
-                : color
-                    ? BLACK_COLOR
-                    : GRAY_COLOR,
-          )),
+        height: 24.h,
+        width: 24.w,
+        child: SvgPicture.asset(
+          iconPath,
+          fit: BoxFit.cover,
+          color: type == 'send'
+              ? PRIMARY_COLOR
+              : color
+                  ? BLACK_COLOR
+                  : GRAY_COLOR,
+        ),
+      ),
     );
   }
 

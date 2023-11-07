@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_todo/components/buttons/main_btn.dart';
 import 'package:my_todo/components/buttons/outline_btn.dart';
-import 'package:my_todo/utils/app_color.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -69,12 +68,6 @@ class WelcomeScreen extends StatelessWidget {
           alignment: Alignment.centerLeft,
           height: 45.h,
           width: 45.w,
-          // child: Image.asset(
-          //   'assets/icons/arrow-left.png',
-          //   color: Theme.of(context).brightness == Brightness.light
-          //       ? BLACK_COLOR
-          //       : GRAY_COLOR,
-          // ),
         ),
       ),
     );
