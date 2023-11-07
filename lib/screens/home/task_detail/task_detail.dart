@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,10 +18,12 @@ class TaskDetail extends StatefulWidget {
     super.key,
     required this.task,
     required this.index,
+    required this.type,
   });
 
   final TaskModel task;
   final int index;
+  final String type;
 
   @override
   State<TaskDetail> createState() => _TaskDetailState();
@@ -37,7 +40,13 @@ class _TaskDetailState extends State<TaskDetail> {
         child: Column(
           children: [
             _buildAppBar(context),
-            _buildBody(textTheme, context, widget.task, widget.index),
+            _buildBody(
+              textTheme,
+              context,
+              widget.task,
+              widget.index,
+              widget.type,
+            ),
           ],
         ),
       ),
@@ -45,7 +54,12 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildBody(
-      TextTheme textTheme, BuildContext context, TaskModel task, int index) {
+    TextTheme textTheme,
+    BuildContext context,
+    TaskModel task,
+    int index,
+    String type,
+  ) {
     var size = MediaQuery.sizeOf(context);
     var color = Theme.of(context).brightness == Brightness.light;
     return Padding(
@@ -55,7 +69,7 @@ class _TaskDetailState extends State<TaskDetail> {
         child: Column(
           children: [
             // title and description
-            _buildInfoTask(textTheme, color, task),
+            _buildInfoTask(textTheme, color, task, type),
             // time
             _buildItem(
               textTheme: textTheme,
@@ -65,13 +79,13 @@ class _TaskDetailState extends State<TaskDetail> {
               value: task.date,
             ),
             // category
-            _buildItem(
-                textTheme: textTheme,
-                context: context,
-                iconPath: 'assets/svgs/tag.svg',
-                title: 'Task Category :',
-                value: 'University',
-                type: 'category'),
+            // _buildItem(
+            //     textTheme: textTheme,
+            //     context: context,
+            //     iconPath: 'assets/svgs/tag.svg',
+            //     title: 'Task Category :',
+            //     value: 'University',
+            //     type: 'category'),
             // index
             _buildItem(
               textTheme: textTheme,
@@ -88,7 +102,12 @@ class _TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildInfoTask(TextTheme textTheme, bool color, TaskModel task) {
+  Widget _buildInfoTask(
+    TextTheme textTheme,
+    bool color,
+    TaskModel task,
+    String type,
+  ) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       height: 65.h,
@@ -101,28 +120,36 @@ class _TaskDetailState extends State<TaskDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(task.title,
-                  style: textTheme.displayMedium!
-                      .copyWith(fontWeight: FontWeight.w400)),
+              Text(
+                task.title,
+                style: textTheme.displayMedium!.copyWith(
+                    fontWeight: FontWeight.w400,
+                    decoration: type == 'pending'
+                        ? TextDecoration.none
+                        : TextDecoration.lineThrough),
+              ),
               Text(task.description, style: textTheme.titleSmall),
             ],
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: () {
-              _showModalBottomSheet(context, task);
-            },
-            child: Container(
-              color: Colors.transparent,
-              height: 24.h,
-              width: 24.w,
-              child: SvgPicture.asset(
-                'assets/svgs/edit-2.svg',
-                fit: BoxFit.cover,
-                color: color ? BLACK_COLOR : WHITE_COLOR,
-              ),
-            ),
-          )
+          //////
+          type == 'pending'
+              ? GestureDetector(
+                  onTap: () {
+                    _showModalBottomSheet(context, task);
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    height: 24.h,
+                    width: 24.w,
+                    child: SvgPicture.asset(
+                      'assets/svgs/edit-2.svg',
+                      fit: BoxFit.cover,
+                      color: color ? BLACK_COLOR : WHITE_COLOR,
+                    ),
+                  ),
+                )
+              : const SizedBox()
         ],
       ),
     );
@@ -182,10 +209,10 @@ class _TaskDetailState extends State<TaskDetail> {
                       onTap: () => _pickDateTime(context),
                       context: context),
                   SizedBox(width: 32.w),
-                  _buildIcon(
-                      iconPath: 'assets/svgs/tag.svg',
-                      onTap: () {},
-                      context: context),
+                  // _buildIcon(
+                  //     iconPath: 'assets/svgs/tag.svg',
+                  //     onTap: () {},
+                  //     context: context),
                   SizedBox(width: 32.w),
                   const Spacer(),
                   Row(
@@ -195,7 +222,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'Cancle',
+                            tr("edit.cancle"),
                             style: textTheme.titleMedium!
                                 .copyWith(color: PRIMARY_COLOR),
                           )),
@@ -207,7 +234,7 @@ class _TaskDetailState extends State<TaskDetail> {
                               id: oldTask.id,
                               title: _titleController.text,
                               description: _descriptionController.text,
-                              date: formatDateTime(dateTime),
+                              date: dateTime.toString(),
                               isCompeleted: false,
                               index: '',
                             );
@@ -220,7 +247,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                           },
-                          child: const Text('Save')),
+                          child: Text(tr("edit.save"))),
                     ],
                   )
                 ],
@@ -343,7 +370,11 @@ Widget _buildItem({
   );
 }
 
-Widget _deteteTask(TextTheme textTheme, BuildContext context, TaskModel task) {
+Widget _deteteTask(
+  TextTheme textTheme,
+  BuildContext context,
+  TaskModel task,
+) {
   return GestureDetector(
     onTap: () {
       showDialog(
@@ -415,26 +446,27 @@ Widget _buildAppBar(BuildContext context) {
               ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(color: color ? GREY1_COLOR : TASK_COLOR),
-            height: 32.h,
-            width: 32.w,
-            child: SvgPicture.asset(
-              'assets/svgs/repeat.svg',
-              fit: BoxFit.cover,
-              color: color ? BLACK_COLOR : WHITE_COLOR,
-            ),
-          )
+          // Container(
+          //   decoration: BoxDecoration(color: color ? GREY1_COLOR : TASK_COLOR),
+          //   height: 32.h,
+          //   width: 32.w,
+          //   child: SvgPicture.asset(
+          //     'assets/svgs/repeat.svg',
+          //     fit: BoxFit.cover,
+          //     color: color ? BLACK_COLOR : WHITE_COLOR,
+          //   ),
+          // )
         ],
       ),
     ),
   );
 }
 
-Widget _buildIcon(
-    {required String iconPath,
-    required VoidCallback onTap,
-    required BuildContext context}) {
+Widget _buildIcon({
+  required String iconPath,
+  required VoidCallback onTap,
+  required BuildContext context,
+}) {
   var color = Theme.of(context).brightness == Brightness.light;
   return InkWell(
     onTap: onTap,

@@ -50,7 +50,15 @@
         "text_theme": "Theme",
         "dark": "Dark",
         "light" : "Light"
-    } 
+    },
+    "tabs" : {
+        "pending" : "Pending",
+        "compeleted" : "Compeleted"
+    },
+    "edit" : {
+        "cancle" : "Cancle",
+        "save" : "Save"
+    }
      
     
 }

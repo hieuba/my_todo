@@ -6,9 +6,11 @@ class TaskList extends StatelessWidget {
   const TaskList({
     super.key,
     required this.taskList,
+    required this.type,
   });
 
   final List<TaskModel> taskList;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class TaskList extends StatelessWidget {
           task: taskList[index],
           context: context,
           index: index,
+          type: type,
         );
       },
     );

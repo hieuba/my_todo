@@ -9,7 +9,6 @@ import 'package:my_todo/components/widgets/build_textfield.dart';
 import 'package:my_todo/components/buttons/main_btn.dart';
 import 'package:my_todo/components/buttons/outline_btn.dart';
 import 'package:my_todo/components/widgets/reusable_text.dart';
-import 'package:my_todo/main.dart';
 import 'package:my_todo/screens/application/application.dart';
 import 'package:my_todo/screens/login/bloc/login_event.dart';
 import 'package:my_todo/screens/login/login_controller.dart';

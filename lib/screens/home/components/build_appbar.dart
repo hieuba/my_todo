@@ -5,8 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget buildAppBar(Size size, TextTheme textTheme, BuildContext context,
-    String? image, bool isLoading) {
+Widget buildAppBar(
+  Size size,
+  TextTheme textTheme,
+  BuildContext context,
+  String? image,
+  bool isLoading,
+) {
   var color = Theme.of(context).brightness == Brightness.light;
   return SizedBox(
     height: 42.h,
@@ -16,8 +21,7 @@ Widget buildAppBar(Size size, TextTheme textTheme, BuildContext context,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              // color: Colors.amber,
+            SizedBox(
               height: 24.h,
               width: 24.w,
               child: SvgPicture.asset(

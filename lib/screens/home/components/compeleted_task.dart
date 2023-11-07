@@ -11,12 +11,13 @@ import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
 import 'package:my_todo/utils/app_color.dart';
 
 Widget compeletedTask(BuildContext context) {
-  var checkColor = Theme.of(context).brightness == Brightness.light;
+  var color = Theme.of(context).brightness == Brightness.light;
   var textTheme = Theme.of(context).textTheme;
+
   return BlocBuilder<TaskBloc, TaskState>(
     builder: (context, state) {
       List<TaskModel> taskList = state.compeletedTasks;
-      print('compeleted List: ${taskList}');
+      // print('compeleted List: ${taskList}');
       return taskList.isEmpty
           ? checkList(textTheme: textTheme)
           : Column(
@@ -28,7 +29,7 @@ Widget compeletedTask(BuildContext context) {
                   width: 76.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6.r),
-                    color: checkColor ? GREY1_COLOR : TASK_COLOR,
+                    color: color ? GREY1_COLOR : TASK_COLOR,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,12 +38,16 @@ Widget compeletedTask(BuildContext context) {
                       SvgPicture.asset(
                         'assets/svgs/arrow-down.svg',
                         fit: BoxFit.cover,
-                        color: checkColor ? BLACK_COLOR : GRAY_COLOR,
+                        color: color ? BLACK_COLOR : GRAY_COLOR,
                       ),
                     ],
                   ),
                 ),
-                Expanded(child: TaskList(taskList: taskList)),
+                Expanded(
+                    child: TaskList(
+                  taskList: taskList,
+                  type: 'compeleted',
+                )),
               ],
             );
     },

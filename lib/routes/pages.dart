@@ -1,12 +1,13 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:my_todo/global.dart';
 import 'package:my_todo/routes/names.dart';
 import 'package:my_todo/screens/application/application.dart';
 import 'package:my_todo/screens/application/bloc/application_bloc.dart';
-import 'package:my_todo/screens/home/home_screen.dart';
 import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
 import 'package:my_todo/screens/intro/bloc/intro_bloc.dart';
 import 'package:my_todo/screens/intro/intro_screen.dart';
@@ -76,8 +77,6 @@ class AppPages {
         ),
       ),
       PageEntity(
-        // route: AppRoutes.HOMEPAGE,
-        // page: const HomeScreen(),
         bloc: BlocProvider(
           create: (context) => TaskBloc(),
         ),

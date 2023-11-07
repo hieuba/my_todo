@@ -12,13 +12,16 @@ import 'package:my_todo/screens/home/components/task_list.dart';
 import 'package:my_todo/screens/home/task/bloc/task_bloc.dart';
 import 'package:my_todo/utils/app_color.dart';
 
-Widget pendingTask(BuildContext context) {
-  var checkColor = Theme.of(context).brightness == Brightness.light;
+Widget pendingTask(
+  BuildContext context,
+) {
+  var color = Theme.of(context).brightness == Brightness.light;
   var textTheme = Theme.of(context).textTheme;
+
   return BlocBuilder<TaskBloc, TaskState>(
     builder: (context, state) {
       List<TaskModel> taskList = state.pendingTasks;
-      print('tasklist: ${taskList}');
+      // print('tasklist: ${taskList}');
       return taskList.isEmpty
           ? checkList(textTheme: textTheme, type: 'pending')
           : Column(
@@ -30,7 +33,7 @@ Widget pendingTask(BuildContext context) {
                   width: 76.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6.r),
-                    color: checkColor ? GREY1_COLOR : TASK_COLOR,
+                    color: color ? GREY1_COLOR : TASK_COLOR,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,7 +42,7 @@ Widget pendingTask(BuildContext context) {
                       SvgPicture.asset(
                         'assets/svgs/arrow-down.svg',
                         fit: BoxFit.cover,
-                        color: checkColor ? BLACK_COLOR : GRAY_COLOR,
+                        color: color ? BLACK_COLOR : GRAY_COLOR,
                       ),
                     ],
                   ),
@@ -47,6 +50,7 @@ Widget pendingTask(BuildContext context) {
                 Expanded(
                   child: TaskList(
                     taskList: taskList,
+                    type: 'pending',
                   ),
                 ),
               ],

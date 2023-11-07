@@ -10,6 +10,7 @@ Widget buildTextField({
   required BuildContext context,
   required String type,
 }) {
+  var color = Theme.of(context).brightness == Brightness.light;
   return Container(
     height: 48.h,
     width: size.width,
@@ -36,9 +37,7 @@ Widget buildTextField({
             onPressed: () {},
             icon: Icon(
               Icons.clear,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? BLACK_COLOR
-                  : GRAY_COLOR,
+              color: color ? BLACK_COLOR : GRAY_COLOR,
             ),
           ),
           hintText: hintText,
@@ -57,9 +56,7 @@ Widget buildTextField({
             ),
           ),
           hintStyle: textTheme.titleSmall!.copyWith(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.grey.shade400
-                : Colors.grey.shade600,
+            color: color ? Colors.grey.shade400 : Colors.grey.shade600,
           ),
         ),
       ),

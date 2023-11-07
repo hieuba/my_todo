@@ -21,3 +21,23 @@ String formatDateTime(DateTime dateTime) {
     return '$formattedDate At $hours:$minutes';
   }
 }
+
+// DateTime formatDateTime(DateTime dateTime) {
+//   final now = DateTime.now();
+//   final tomorrow = DateTime(now.year, now.month, now.day + 1);
+
+//   if (dateTime.year == now.year &&
+//       dateTime.month == now.month &&
+//       dateTime.day == now.day) {
+//     return DateTime(
+//         now.year, now.month, now.day, dateTime.hour, dateTime.minute);
+//   } else if (dateTime.year == tomorrow.year &&
+//       dateTime.month == tomorrow.month &&
+//       dateTime.day == tomorrow.day) {
+//     return DateTime(tomorrow.year, tomorrow.month, tomorrow.day, dateTime.hour,
+//         dateTime.minute);
+//   } else {
+//     // Không thay đổi ngày tháng nếu không phải "today" hoặc "tomorrow"
+//     return dateTime;
+//   }
+// }
